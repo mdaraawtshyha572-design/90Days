@@ -1,0 +1,3200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<title>90 Days — العهد</title>
+
+<!-- PWA: Standalone app mode -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="90 يوم">
+<meta name="theme-color" content="#0c0a09">
+
+<!-- App icon (uses embedded SVG so no extra file needed) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230c0a09'/><text x='90' y='115' font-family='serif' font-size='80' font-weight='500' fill='%23c8a96a' text-anchor='middle'>90</text></svg>">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230c0a09'/><text x='90' y='115' font-family='serif' font-size='80' font-weight='500' fill='%23c8a96a' text-anchor='middle'>90</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a09;
+    --bg-2: #14110f;
+    --panel: #1a1613;
+    --panel-2: #221c18;
+    --ink: #f5eee0;
+    --ink-dim: #a8a095;
+    --ink-mute: #6b655c;
+    --line: #2a2320;
+    --accent: #c8a96a;
+    --accent-soft: #8a6d3b;
+    --success: #7ea672;
+    --fail: #b5524a;
+    --neutral: #5a5450;
+    --shadow: 0 20px 60px -20px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(200,169,106,.04) 0, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(181,82,74,.03) 0, transparent 40%);
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(12,10,9,.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: baseline;
+    gap: .8rem;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .logo-num {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -.02em;
+  }
+  .logo-text {
+    font-size: 1rem;
+    color: var(--ink-dim);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tabs {
+    display: flex;
+    gap: .4rem;
+    list-style: none;
+  }
+  .tabs button {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--ink-dim);
+    padding: .55rem 1.1rem;
+    font-family: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all .25s ease;
+    letter-spacing: .02em;
+  }
+  .tabs button:hover { color: var(--ink); background: var(--panel); }
+  .tabs button.active {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+    background: rgba(200,169,106,.06);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 4rem 0 2.5rem;
+    position: relative;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 .italic {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    color: var(--ink-dim);
+    font-size: 1.05rem;
+    max-width: 480px;
+    line-height: 1.8;
+  }
+  .hero-sub .highlight { color: var(--accent); }
+
+  .counter-card {
+    background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .counter-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(200,169,106,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .counter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .25em;
+    color: var(--ink-mute);
+    margin-bottom: .8rem;
+  }
+  .counter-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .counter-number .slash {
+    color: var(--ink-mute);
+    font-weight: 300;
+  }
+  .counter-number .total {
+    color: var(--ink-mute);
+    font-size: 3rem;
+  }
+  .counter-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+  }
+  .meta-item .meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+  .meta-item .meta-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin-top: .1rem;
+  }
+
+  /* ===== SECTIONS ===== */
+  section { display: none; padding: 2rem 0 5rem; }
+  section.active { display: block; animation: fadeIn .5s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+  .section-title .accent { color: var(--accent); font-style: italic; }
+  .section-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+
+  /* ===== CHECK-IN ===== */
+  .checkin-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+  }
+
+  .today-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .today-head {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .today-date {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-dim);
+    font-size: .85rem;
+    letter-spacing: .1em;
+  }
+  .today-day-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+  }
+
+  .priority {
+    padding: 1.3rem 2rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    transition: background .2s;
+  }
+  .priority:last-child { border-bottom: none; }
+  .priority:hover { background: rgba(255,255,255,.01); }
+
+  .priority-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--ink-mute);
+    line-height: 1;
+    min-width: 2rem;
+  }
+  .priority-body { flex: 1; }
+  .priority-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: .25rem;
+  }
+  .priority-desc {
+    color: var(--ink-dim);
+    font-size: .82rem;
+    line-height: 1.5;
+  }
+  .priority-actions {
+    display: flex;
+    gap: .5rem;
+    margin-top: .7rem;
+  }
+  .btn-check {
+    width: 38px; height: 38px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink-mute);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+  }
+  .btn-check:hover { border-color: var(--accent-soft); color: var(--ink); }
+  .btn-check.active.success {
+    background: rgba(126,166,114,.15);
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .btn-check.active.fail {
+    background: rgba(181,82,74,.15);
+    border-color: var(--fail);
+    color: var(--fail);
+  }
+
+  .priority-note {
+    width: 100%;
+    margin-top: .7rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .6rem .8rem;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: .85rem;
+    resize: vertical;
+    min-height: 38px;
+    max-height: 120px;
+    direction: rtl;
+  }
+  .priority-note:focus {
+    outline: none;
+    border-color: var(--accent-soft);
+  }
+
+  /* Rating card */
+  .rating-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+  .rating-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .rating-options {
+    display: grid;
+    gap: .6rem;
+    margin-bottom: 1.5rem;
+  }
+  .rating-btn {
+    padding: .8rem 1.2rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-dim);
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+    font-size: .95rem;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+  }
+  .rating-btn:hover { border-color: var(--accent-soft); color: var(--ink); }
+  .rating-btn.active {
+    background: rgba(200,169,106,.08);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .rating-btn .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor;
+    opacity: .7;
+  }
+
+  .save-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+  .save-btn:hover { background: #d9bc80; transform: translateY(-1px); }
+  .save-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+  .day-note-area {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .8rem;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: .9rem;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 1rem;
+    direction: rtl;
+  }
+  .day-note-area:focus { outline: none; border-color: var(--accent-soft); }
+
+  .rating-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: .6rem;
+  }
+
+  /* ===== STATS ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+    opacity: .3;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin: .4rem 0;
+  }
+  .stat-sub {
+    font-size: .8rem;
+    color: var(--ink-dim);
+  }
+
+  .chart-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .chart-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Grid of days */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 4px;
+  }
+  .day-cell {
+    aspect-ratio: 1;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem;
+    color: var(--ink-mute);
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+  }
+  .day-cell:hover { transform: scale(1.15); z-index: 3; border-color: var(--accent); }
+  .day-cell.d-ideal { background: rgba(200,169,106,.3); border-color: var(--accent); color: var(--ink); }
+  .day-cell.d-success { background: rgba(126,166,114,.25); border-color: var(--success); color: var(--ink); }
+  .day-cell.d-good { background: rgba(126,166,114,.12); border-color: var(--success); color: var(--ink-dim); }
+  .day-cell.d-fail { background: rgba(181,82,74,.15); border-color: var(--fail); color: var(--ink-dim); }
+  .day-cell.d-excused { background: rgba(90,84,80,.3); border-color: var(--neutral); color: var(--ink-dim); }
+  .day-cell.today {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    font-size: .75rem;
+    color: var(--ink-dim);
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: .4rem; }
+  .legend-swatch {
+    width: 14px; height: 14px; border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+
+  /* Bar chart */
+  .priority-stats {
+    display: grid;
+    gap: 1rem;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 60px;
+    align-items: center;
+    gap: 1rem;
+  }
+  .bar-label {
+    font-size: .9rem;
+    color: var(--ink-dim);
+  }
+  .bar-track {
+    height: 10px;
+    background: var(--bg-2);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    border-radius: 10px;
+    transition: width .6s ease;
+  }
+  .bar-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--accent);
+    text-align: left;
+    direction: ltr;
+  }
+
+  /* ===== DREAMS ===== */
+  .dreams-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .dream-form {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+  .dream-form h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+  .dream-form input, .dream-form textarea {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .8rem;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: .95rem;
+    margin-bottom: 1rem;
+    direction: rtl;
+  }
+  .dream-form textarea {
+    min-height: 160px;
+    resize: vertical;
+    line-height: 1.7;
+  }
+  .dream-form input:focus, .dream-form textarea:focus {
+    outline: none; border-color: var(--accent-soft);
+  }
+  .dream-form label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .5rem;
+  }
+
+  .mood-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-bottom: 1rem;
+  }
+  .mood-pill {
+    padding: .4rem .9rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--bg-2);
+    color: var(--ink-dim);
+    font-size: .8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .mood-pill:hover { color: var(--ink); border-color: var(--accent-soft); }
+  .mood-pill.active {
+    background: rgba(200,169,106,.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .dreams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .dream-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.8rem;
+    transition: all .3s;
+    position: relative;
+  }
+  .dream-card:hover {
+    border-color: var(--accent-soft);
+    transform: translateY(-2px);
+  }
+  .dream-card::before {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 30%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity .3s;
+    border-radius: 3px;
+  }
+  .dream-card:hover::before { opacity: .6; }
+
+  .dream-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: .8rem;
+    gap: 1rem;
+  }
+  .dream-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .dream-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: var(--ink-mute);
+    letter-spacing: .1em;
+    white-space: nowrap;
+  }
+  .dream-mood {
+    display: inline-block;
+    padding: .2rem .7rem;
+    border-radius: 20px;
+    background: rgba(200,169,106,.1);
+    color: var(--accent);
+    font-size: .72rem;
+    margin-bottom: .8rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .05em;
+  }
+  .dream-body {
+    color: var(--ink-dim);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow: hidden;
+    position: relative;
+    font-size: .92rem;
+  }
+  .dream-body.expanded { max-height: none; }
+  .dream-body:not(.expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0; left: 0;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, var(--panel));
+  }
+  .dream-actions {
+    display: flex;
+    gap: .5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .dream-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: .35rem .8rem;
+    border-radius: 3px;
+    font-size: .75rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .dream-btn:hover { color: var(--ink); border-color: var(--accent-soft); }
+  .dream-btn.danger:hover { color: var(--fail); border-color: var(--fail); }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ink-mute);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+
+  /* ===== COVENANT ===== */
+  .covenant-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .covenant-card {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 6px;
+    padding: 3.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .covenant-card::before, .covenant-card::after {
+    content: '۞';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--accent);
+    opacity: .1;
+    font-size: 8rem;
+  }
+  .covenant-card::before { top: -2rem; right: -1rem; }
+  .covenant-card::after { bottom: -2rem; left: -1rem; transform: rotate(180deg); }
+
+  .covenant-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .covenant-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--ink);
+  }
+  .covenant-text {
+    font-size: 1.15rem;
+    line-height: 2;
+    color: var(--ink-dim);
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+  }
+  .covenant-text strong { color: var(--accent); font-weight: 500; }
+  .covenant-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    text-align: center;
+    color: var(--ink);
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .goals-list {
+    margin-top: 2rem;
+    display: grid;
+    gap: .8rem;
+  }
+  .goal-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .8rem 1.2rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  .goal-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    font-weight: 500;
+    min-width: 1.5rem;
+  }
+
+  .law-card {
+    margin-top: 2rem;
+    padding: 1.8rem;
+    background: rgba(181,82,74,.05);
+    border: 1px solid rgba(181,82,74,.3);
+    border-radius: 6px;
+  }
+  .law-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--fail);
+    margin-bottom: 1rem;
+  }
+  .law-card ul { list-style: none; }
+  .law-card li {
+    padding: .4rem 0;
+    color: var(--ink-dim);
+    font-size: .95rem;
+  }
+  .law-card li::before {
+    content: '×';
+    color: var(--fail);
+    margin-left: .8rem;
+    font-weight: bold;
+  }
+
+  /* ===== HABIT TRACKER ===== */
+  .habit-hero {
+    background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .habit-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,169,106,.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .habit-name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    text-align: center;
+    padding: .5rem;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: .5rem;
+    direction: rtl;
+  }
+  .habit-name-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .habit-since-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .25em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .habit-counter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--accent);
+    margin: 1rem 0;
+    position: relative;
+    z-index: 2;
+  }
+  .habit-counter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem;
+    letter-spacing: .3em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .habit-check-box {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .habit-btn {
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all .25s;
+    min-width: 180px;
+  }
+  .habit-btn.clean {
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .habit-btn.clean:hover {
+    background: rgba(126,166,114,.12);
+  }
+  .habit-btn.clean.checked {
+    background: rgba(126,166,114,.2);
+  }
+  .habit-btn.relapse {
+    border-color: var(--fail);
+    color: var(--fail);
+  }
+  .habit-btn.relapse:hover {
+    background: rgba(181,82,74,.08);
+  }
+  .habit-status-text {
+    margin-top: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink-dim);
+    min-height: 1.5rem;
+  }
+
+  .habit-timeline {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .habit-timeline h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  .habit-log-list {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .habit-log-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .8rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: .95rem;
+  }
+  .habit-log-item:last-child { border-bottom: none; }
+  .habit-log-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--ink-dim);
+  }
+  .habit-log-status {
+    font-weight: 500;
+    font-size: .85rem;
+  }
+  .habit-log-status.clean { color: var(--success); }
+  .habit-log-status.relapse { color: var(--fail); }
+  .habit-log-delete {
+    background: transparent;
+    border: none;
+    color: var(--ink-mute);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: .2rem .5rem;
+    margin-right: .5rem;
+  }
+  .habit-log-delete:hover { color: var(--fail); }
+
+  /* Reset modal */
+  .habit-reset-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-mute);
+    padding: .5rem 1rem;
+    border-radius: 4px;
+    font-size: .8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .2s;
+    margin-top: 1rem;
+  }
+  .habit-reset-btn:hover {
+    border-color: var(--fail);
+    color: var(--fail);
+  }
+
+  /* ===== PUNISHMENT SYSTEM ===== */
+  .pun-warning-banner {
+    background: linear-gradient(145deg, rgba(181,82,74,.15), rgba(181,82,74,.05));
+    border: 1px solid var(--fail);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .pun-warning-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(181,82,74,.03) 20px,
+      rgba(181,82,74,.03) 40px
+    );
+    pointer-events: none;
+  }
+  .pun-warning-banner.clean {
+    background: linear-gradient(145deg, rgba(126,166,114,.12), rgba(126,166,114,.03));
+    border-color: var(--success);
+  }
+  .pun-warning-banner.clean::before {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(126,166,114,.03) 20px,
+      rgba(126,166,114,.03) 40px
+    );
+  }
+  .pun-warning-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--fail);
+    margin-bottom: .8rem;
+    position: relative;
+    z-index: 2;
+  }
+  .pun-warning-banner.clean .pun-warning-label { color: var(--success); }
+  .pun-warning-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+    color: var(--ink);
+  }
+  .pun-warning-title .accent-num {
+    color: var(--fail);
+    font-style: italic;
+  }
+  .pun-warning-banner.clean .pun-warning-title .accent-num {
+    color: var(--success);
+  }
+  .pun-warning-sub {
+    margin-top: 1rem;
+    color: var(--ink-dim);
+    font-size: .95rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Timer */
+  .work-timer {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .work-timer h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: .5rem;
+  }
+  .work-timer-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .timer-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--accent);
+    margin: 1rem 0;
+    letter-spacing: -.02em;
+  }
+  .timer-display.running {
+    color: var(--success);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
+  }
+  .timer-today {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--ink-dim);
+    margin-bottom: 1.5rem;
+  }
+  .timer-today strong { color: var(--accent); }
+  .timer-controls {
+    display: flex;
+    gap: .8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .timer-btn {
+    padding: .8rem 1.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    transition: all .2s;
+    min-width: 130px;
+  }
+  .timer-btn.primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .timer-btn.primary:hover { background: #d9bc80; transform: translateY(-1px); }
+  .timer-btn.danger {
+    border-color: var(--fail);
+    color: var(--fail);
+  }
+  .timer-btn.danger:hover { background: rgba(181,82,74,.1); }
+  .timer-btn:hover { border-color: var(--accent-soft); }
+  .manual-input-row {
+    display: flex;
+    gap: .5rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .manual-input-row label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    color: var(--ink-mute);
+    letter-spacing: .1em;
+  }
+  .manual-input-row input {
+    width: 80px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .4rem .6rem;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    text-align: center;
+  }
+  .manual-input-row input:focus { outline: none; border-color: var(--accent-soft); }
+  .manual-input-row button {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: .4rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .85rem;
+  }
+  .manual-input-row button:hover { border-color: var(--accent-soft); color: var(--ink); }
+
+  /* Debt breakdown */
+  .pun-debts {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .pun-debts h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .pun-debts h3 .debt-total {
+    font-size: 1rem;
+    color: var(--fail);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .debt-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .debt-item:last-child { border-bottom: none; }
+  .debt-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(181,82,74,.1);
+    border: 1px solid rgba(181,82,74,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--fail);
+    font-weight: 500;
+  }
+  .debt-item.paid .debt-icon {
+    background: rgba(126,166,114,.1);
+    border-color: rgba(126,166,114,.3);
+    color: var(--success);
+  }
+  .debt-info .debt-label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: .2rem;
+  }
+  .debt-info .debt-detail {
+    font-size: .82rem;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .debt-info .debt-detail .plus { color: var(--fail); }
+  .debt-item.paid .debt-info .debt-label { text-decoration: line-through; color: var(--ink-mute); }
+
+  /* Active session box */
+  .active-session {
+    background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 40px -10px rgba(200,169,106,.2);
+  }
+  .active-session h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    text-align: center;
+  }
+  .session-exercises {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .exercise-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  .exercise-row.done {
+    background: rgba(126,166,114,.08);
+    border-color: var(--success);
+  }
+  .exercise-label {
+    font-size: 1rem;
+  }
+  .exercise-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    margin-right: .5rem;
+  }
+  .exercise-row.done .exercise-label {
+    color: var(--success);
+  }
+  .exercise-check {
+    width: 32px; height: 32px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-mute);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  .exercise-check.checked {
+    background: rgba(126,166,114,.15);
+    border-color: var(--success);
+    color: var(--success);
+  }
+  .session-complete-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--success);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+  .session-complete-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .session-complete-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Pay session card */
+  .pay-session-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .pay-session-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .pay-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: .8rem;
+    margin: 1rem 0;
+  }
+  .pay-option {
+    padding: 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .pay-option:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pay-option:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+  }
+  .pay-option .pay-hours {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    display: block;
+    margin-bottom: .3rem;
+  }
+  .pay-option .pay-label {
+    font-size: .75rem;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .1em;
+  }
+
+  /* Message card for social */
+  .msg-card {
+    padding: 1.2rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-dim);
+    font-size: .92rem;
+    margin: 1rem 0;
+    line-height: 1.7;
+  }
+  .msg-card strong { color: var(--ink); }
+
+  /* History */
+  .pun-history-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pun-history-item:last-child { border-bottom: none; }
+  .pun-history-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--ink-dim);
+    min-width: 100px;
+  }
+  .pun-history-summary {
+    font-size: .9rem;
+  }
+  .pun-history-summary .debt { color: var(--fail); }
+  .pun-history-summary .paid { color: var(--success); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 2rem;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--ink-mute);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .1em;
+    margin-top: 3rem;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    color: var(--ink);
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    transform: translateX(120%);
+    transition: transform .4s cubic-bezier(.4,0,.2,1);
+    z-index: 100;
+    font-size: .9rem;
+  }
+  .toast.show { transform: translateX(0); }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 2rem;
+  }
+  .modal.show { display: flex; animation: fadeIn .2s; }
+  .modal-content {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-content h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .modal-close {
+    float: left;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    width: 32px; height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .hero-grid, .checkin-layout, .dreams-layout { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .days-grid { grid-template-columns: repeat(10, 1fr); }
+    .bar-row { grid-template-columns: 120px 1fr 50px; }
+    nav { flex-direction: column; gap: 1rem; padding: 1rem; }
+    .tabs { flex-wrap: wrap; justify-content: center; }
+    .container { padding: 0 1rem; }
+    .covenant-card { padding: 2rem 1.2rem; }
+    .covenant-title { font-size: 2rem; }
+    .dream-form, .rating-card { position: static; }
+  }
+  @media (max-width: 520px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .days-grid { grid-template-columns: repeat(7, 1fr); }
+    .hero h1 { font-size: 2.8rem; }
+    .counter-number { font-size: 3.5rem; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-soft); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-num">90</span>
+    <span class="logo-text">Days · العهد</span>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="active" data-tab="home">الرئيسية</button>
+    <button data-tab="checkin">تسجيل اليوم</button>
+    <button data-tab="stats">الإحصائيات</button>
+    <button data-tab="dreams">الأحلام</button>
+    <button data-tab="habit">العادة</button>
+    <button data-tab="punishment">العقاب</button>
+    <button data-tab="covenant">العهد</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== HOME ===== -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>
+          تسعون يومًا<br>
+          <span class="italic">كافية.</span>
+        </h1>
+        <p class="hero-sub">
+          رحلة مبنية على الالتزام لا الكمال.
+          <span class="highlight">نظام من خمس أولويات</span> يتكرر يوميًا.
+          لا تعديل أثناء الرحلة، لا تحسين، لا مقارنة — فقط عبور.
+        </p>
+      </div>
+      <div class="counter-card">
+        <div class="counter-label">التقدم · Progress</div>
+        <div class="counter-number">
+          <span id="dayCurrent">65</span><span class="slash"> / </span><span class="total">90</span>
+        </div>
+        <div class="counter-meta">
+          <div class="meta-item">
+            <div class="meta-label">المتبقي · Remaining</div>
+            <div class="meta-value" id="dayRemaining">25</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">النسبة · Progress</div>
+            <div class="meta-value" id="dayPercent">72%</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">أيام ناجحة</div>
+            <div class="meta-value" id="successCount">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head" style="margin-top: 3rem;">
+    <h2 class="section-title">اليوم <span class="accent">Today</span></h2>
+    <span class="section-sub" id="homeDate"></span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">أيام مثالية</div>
+      <div class="stat-value" id="idealCount">0</div>
+      <div class="stat-sub">5/5 priorities</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Streak حالي</div>
+      <div class="stat-value" id="streakCount">0</div>
+      <div class="stat-sub">أيام متتالية</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">أعلى Streak</div>
+      <div class="stat-value" id="bestStreak">0</div>
+      <div class="stat-sub">أفضل سلسلة</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">نظيف من العادة</div>
+      <div class="stat-value" id="habitStreakHome">0</div>
+      <div class="stat-sub">يوم متتالي</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>خريطة الـ 90 يوم</h3>
+    <div class="days-grid" id="homeDaysGrid"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(200,169,106,.3);border-color:var(--accent)"></div> مثالي 5/5</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(126,166,114,.25);border-color:var(--success)"></div> ناجح 4/5</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(126,166,114,.12);border-color:var(--success)"></div> جيد 3/5</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(181,82,74,.15);border-color:var(--fail)"></div> فاشل</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(90,84,80,.3);border-color:var(--neutral)"></div> معذور</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHECKIN ===== -->
+<section id="checkin">
+  <div class="section-head">
+    <h2 class="section-title">تسجيل <span class="accent">اليوم</span></h2>
+    <span class="section-sub" id="checkinDate"></span>
+  </div>
+
+  <div class="checkin-layout">
+    <div class="today-card">
+      <div class="today-head">
+        <div>
+          <div class="today-date" id="todayFullDate">—</div>
+        </div>
+        <div class="today-day-num">Day <span id="todayDayNum">—</span></div>
+      </div>
+      <div id="prioritiesList"></div>
+    </div>
+
+    <div class="rating-card">
+      <h3>تقييم اليوم</h3>
+      <div class="rating-label">نوع اليوم · Day type</div>
+      <div class="rating-options" id="ratingOptions">
+        <button class="rating-btn" data-rating="ideal"><span class="dot" style="background:#c8a96a"></span> يوم مثالي</button>
+        <button class="rating-btn" data-rating="success"><span class="dot" style="background:#7ea672"></span> يوم ناجح</button>
+        <button class="rating-btn" data-rating="good"><span class="dot" style="background:#6b9061"></span> يوم جيد</button>
+        <button class="rating-btn" data-rating="fail"><span class="dot" style="background:#b5524a"></span> يوم فاشل</button>
+        <button class="rating-btn" data-rating="excused"><span class="dot" style="background:#5a5450"></span> يوم معذور</button>
+      </div>
+      <div class="rating-label">ملاحظات اليوم · Notes</div>
+      <textarea class="day-note-area" id="dayNote" placeholder="اكتب ملاحظاتك عن اليوم..."></textarea>
+      <button class="save-btn" id="saveDayBtn">حفظ اليوم · Save Day</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section id="stats">
+  <div class="section-head">
+    <h2 class="section-title">الإحصائيات <span class="accent">·  Statistics</span></h2>
+    <button class="dream-btn" id="exportBtn">تصدير البيانات</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">إجمالي الأيام</div>
+      <div class="stat-value" id="s_total">0</div>
+      <div class="stat-sub">من أصل 90</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">نسبة الالتزام</div>
+      <div class="stat-value" id="s_rate">0%</div>
+      <div class="stat-sub">Overall rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">أيام ناجحة+</div>
+      <div class="stat-value" id="s_good">0</div>
+      <div class="stat-sub">ناجح أو أفضل</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">أيام فاشلة</div>
+      <div class="stat-value" id="s_fail">0</div>
+      <div class="stat-sub">Failed days</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>أداء كل أولوية</h3>
+    <div class="priority-stats" id="priorityStats"></div>
+  </div>
+
+  <div class="chart-card">
+    <h3>خريطة الأيام الكاملة</h3>
+    <div class="days-grid" id="statsDaysGrid"></div>
+  </div>
+</section>
+
+<!-- ===== DREAMS ===== -->
+<section id="dreams">
+  <div class="section-head">
+    <h2 class="section-title">الأحلام <span class="accent">· Dreams</span></h2>
+    <span class="section-sub">سجل ما تراه</span>
+  </div>
+
+  <div class="dreams-layout">
+    <div class="dream-form">
+      <h3>حلم جديد</h3>
+      <label>العنوان · Title</label>
+      <input type="text" id="dreamTitle" placeholder="أعطِ حلمك عنوانًا..."/>
+      <label>الشعور · Mood</label>
+      <div class="mood-picker" id="moodPicker">
+        <button class="mood-pill" data-mood="قوي">قوي</button>
+        <button class="mood-pill" data-mood="غريب">غريب</button>
+        <button class="mood-pill" data-mood="مخيف">مخيف</button>
+        <button class="mood-pill" data-mood="جميل">جميل</button>
+        <button class="mood-pill" data-mood="حزين">حزين</button>
+        <button class="mood-pill" data-mood="غامض">غامض</button>
+        <button class="mood-pill" data-mood="رمزي">رمزي</button>
+      </div>
+      <label>التفاصيل · Details</label>
+      <textarea id="dreamBody" placeholder="صف الحلم بتفاصيله، المشاعر، الأشخاص، الأماكن..."></textarea>
+      <button class="save-btn" id="saveDreamBtn">حفظ الحلم · Save Dream</button>
+    </div>
+
+    <div class="dreams-list" id="dreamsList"></div>
+  </div>
+</section>
+
+<!-- ===== HABIT (QUIT BAD HABIT) ===== -->
+<section id="habit">
+  <div class="section-head">
+    <h2 class="section-title">ترك <span class="accent">العادة</span></h2>
+    <span class="section-sub">كل يوم نظيف انتصار</span>
+  </div>
+
+  <div class="habit-hero">
+    <div class="habit-since-label">العادة · Habit</div>
+    <input type="text" class="habit-name-input" id="habitName" placeholder="اسم العادة..." value="Goal Battles"/>
+    <div class="habit-since-label" style="margin-top: 1.5rem;">نظيف منذ · Clean For</div>
+    <div class="habit-counter" id="habitCounter">0</div>
+    <div class="habit-counter-label" id="habitUnit">يوم · Days</div>
+
+    <div class="habit-check-box">
+      <button class="habit-btn clean" id="markCleanBtn">✓ نظيف اليوم</button>
+      <button class="habit-btn relapse" id="markRelapseBtn">✗ انزلقت اليوم</button>
+    </div>
+    <div class="habit-status-text" id="habitStatusText"></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">أطول سلسلة</div>
+      <div class="stat-value" id="habit_longest">0</div>
+      <div class="stat-sub">أفضل رقم</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">السلسلة الحالية</div>
+      <div class="stat-value" id="habit_current">0</div>
+      <div class="stat-sub">متتالي</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">أيام نظيفة</div>
+      <div class="stat-value" id="habit_clean_total">0</div>
+      <div class="stat-sub">الإجمالي</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">انزلاقات</div>
+      <div class="stat-value" id="habit_relapses">0</div>
+      <div class="stat-sub">المرات</div>
+    </div>
+  </div>
+
+  <div class="habit-timeline">
+    <h3>السجل الكامل</h3>
+    <div class="habit-log-list" id="habitLogList">
+      <div class="empty-state" style="padding:2rem;">لم يتم التسجيل بعد</div>
+    </div>
+    <button class="habit-reset-btn" id="habitResetBtn">إعادة تصفير البيانات</button>
+  </div>
+</section>
+
+<!-- ===== PUNISHMENT ===== -->
+<section id="punishment">
+  <div class="section-head">
+    <h2 class="section-title">العقاب <span class="accent">· Debt</span></h2>
+    <span class="section-sub">الديون تُسدَّد بالجسد</span>
+  </div>
+
+  <div class="pun-warning-banner" id="punBanner">
+    <div class="pun-warning-label" id="punBannerLabel">إجمالي الدين · Total Debt</div>
+    <div class="pun-warning-title" id="punBannerTitle">—</div>
+    <div class="pun-warning-sub" id="punBannerSub">—</div>
+  </div>
+
+  <!-- Work Timer -->
+  <div class="work-timer">
+    <h3>مؤقت الشغل</h3>
+    <div class="work-timer-sub">8 ساعات يومياً · Work Tracker</div>
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <div class="timer-today">اليوم: <strong id="todayWorkedStr">0h 0m</strong> / 8h · الباقي: <strong id="todayRemainingStr">8h 0m</strong></div>
+    <div class="timer-controls">
+      <button class="timer-btn primary" id="timerStartBtn">ابدأ · Start</button>
+      <button class="timer-btn" id="timerPauseBtn" style="display:none;">وقّف · Pause</button>
+      <button class="timer-btn danger" id="timerResetBtn">تصفير اليوم</button>
+    </div>
+    <div class="manual-input-row">
+      <label>أضف يدوياً:</label>
+      <input type="number" id="manualHours" min="0" max="8" step="0.25" placeholder="0.5">
+      <span style="color:var(--ink-mute);font-size:.8rem;">ساعة</span>
+      <button id="manualAddBtn">إضافة</button>
+    </div>
+  </div>
+
+  <!-- Active Session (appears when started) -->
+  <div class="active-session" id="activeSession" style="display:none;">
+    <h3>جلسة عقاب نشطة 🔥</h3>
+    <div class="session-exercises" id="sessionExercises"></div>
+    <button class="session-complete-btn" id="sessionCompleteBtn">أكملت الجلسة · Complete</button>
+  </div>
+
+  <!-- Debts breakdown -->
+  <div class="pun-debts">
+    <h3>
+      <span>تفاصيل الدين اليوم</span>
+      <span class="debt-total" id="debtTotalMini">—</span>
+    </h3>
+    <div id="debtsList"></div>
+  </div>
+
+  <!-- Pay session -->
+  <div class="pay-session-card" id="paySessionCard">
+    <h3>ابدأ جلسة تسديد · Pay Session</h3>
+    <p style="color:var(--ink-dim);font-size:.92rem;line-height:1.7;margin-bottom:.5rem;">
+      اختر كم ساعة دين تبغى تعوّض الآن. كل ساعة = <strong style="color:var(--accent);">4 دقائق بلانك + بوش اب للفشل العضلي</strong>.
+      بعدها استرح 30-60 دقيقة وعاود.
+    </p>
+    <div class="pay-options" id="payOptions"></div>
+  </div>
+
+  <!-- Custom punishment status for today's priorities -->
+  <div class="pay-session-card" id="priorityPunishments" style="display:none;">
+    <h3>عقوبات أولويات اليوم</h3>
+    <div id="priorityPunList"></div>
+  </div>
+
+  <!-- History -->
+  <div class="pun-debts">
+    <h3>سجل الديون</h3>
+    <div id="punHistory"></div>
+  </div>
+</section>
+
+<!-- ===== COVENANT ===== -->
+<section id="covenant">
+  <div class="section-head">
+    <h2 class="section-title">العهد <span class="accent">· The Covenant</span></h2>
+    <span class="section-sub">لا تنس لماذا بدأت</span>
+  </div>
+
+  <div class="covenant-wrap">
+    <div class="covenant-card">
+      <div class="covenant-label">۞ القسم ۞</div>
+      <h3 class="covenant-title">تسعون يومًا تكفي</h3>
+
+      <p class="covenant-text">
+        <strong>والله العظيم</strong> ما ألعب Goal Battles ولا أي شيء من مشتقاتها،
+        سواء تحديث جذري، اكتشاف جديد، بق محتمل، أو أي شيء ثاني يحمسني.
+        <strong>قسمًا بالله.</strong>
+      </p>
+
+      <div class="covenant-quote">
+        "مشكلتك تستسلم وتنسى<br>أن الموضوع يبغى أكثر من محاولة"
+      </div>
+
+      <p class="covenant-text">
+        أقسم بالله ما ألعب Goal Battles وكل مشتقاتها <strong>إلا بعد ما أسوي لعبة ناجحة</strong>.
+        <br>يا نواف، لا تخلي أي شيء جديد يسيطر عليك.
+      </p>
+
+      <h4 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; margin-top: 2rem; margin-bottom: 1rem; text-align:center;">الأهداف · Goals</h4>
+      <div class="goals-list">
+        <div class="goal-item"><span class="goal-num">1</span><span>صنع لعبة ناجحة</span></div>
+        <div class="goal-item"><span class="goal-num">2</span><span>الراحة مع الناس</span></div>
+        <div class="goal-item"><span class="goal-num">3</span><span>الوصول إلى 60 كيلو وبناء فك قوي</span></div>
+        <div class="goal-item"><span class="goal-num">4</span><span>النوم الثابت</span></div>
+        <div class="goal-item"><span class="goal-num">5</span><span>النظافة الشخصية</span></div>
+      </div>
+
+      <div class="law-card">
+        <div class="law-title">قانون نفسي مهم</div>
+        <ul>
+          <li>لا تعدّل النظام أثناء الـ 90 يوم</li>
+          <li>لا تحسّن</li>
+          <li>لا تطوّر</li>
+          <li>لا تقارن</li>
+        </ul>
+      </div>
+
+      <p class="covenant-text" style="margin-top: 2rem; font-size: 1rem; font-style: italic; color: var(--ink-mute);">
+        الـ ✓ لا يعني أن اليوم كان جيدًا، بل أنه مرّ وعدّى.
+      </p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  90 DAYS · محفوظ محليًا في متصفحك · Nothing to prove but endurance
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="dayModal">
+  <div class="modal-content" id="dayModalContent"></div>
+</div>
+
+<script>
+/* ============ STATE ============ */
+const START_DATE = new Date('2026-02-10'); // Day 1 (adjusted so today = Day 66)
+const TOTAL_DAYS = 90;
+
+const PRIORITIES = [
+  { id: 1, title: 'صنع لعبة ناجحة', desc: 'اشتغلت على اللعبة بأي وقت وبأفضل جودة. الشغل هو الأساس، مو جانبي.' },
+  { id: 2, title: 'التعرّض الاجتماعي', desc: 'خروج 15-20 دقيقة، أو وجود بالمدرسة بدون تفاعل.' },
+  { id: 3, title: 'الجسم · وزن + فك', desc: 'تمرين الساعة 1، أكل أكثر، تمارين الفك، علك، Mewing.' },
+  { id: 4, title: 'النوم', desc: 'منبه النوم يرن → للفراش مباشرة. النافذة: 10:30-11:30.' },
+  { id: 5, title: 'النظافة', desc: 'ساعة واحدة: تنظيف، شاور، غسيل، ترتيب، تبخير.' },
+];
+
+const STORAGE_KEY = 'nineDaysData_v1';
+
+let data = loadData();
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (!d.habit) d.habit = { name: 'Goal Battles', log: {} };
+      if (!d.punishment) d.punishment = {
+        workLog: {},      // {iso: hoursWorked}
+        debtHistory: {},  // {iso: {workHoursMissed, exercisePun, foodPun, cleanPun, socialPun, paidHours, timestamp}}
+        paidSessions: [], // [{iso, hours, timestamp}]
+        manualOverrides: {}, // {iso: {exercise: true/false, food: ..., clean: ..., social: ...}}
+      };
+      return d;
+    }
+  } catch(e) { console.warn(e); }
+  return {
+    days: {},
+    dreams: [],
+    habit: { name: 'Goal Battles', log: {} },
+    punishment: {
+      workLog: {},
+      debtHistory: {},
+      paidSessions: [],
+      manualOverrides: {},
+    }
+  };
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/* Seed history from provided log if empty */
+function seedHistory() {
+  if (Object.keys(data.days).length > 0) return;
+  // From the document. Format: dayNum -> [p1, p2, p3, p4, p5] + rating
+  // ✅=true, ❌=false, ✔️=kinda true, ✖=N/A
+  const seed = {
+    1:  { p:[false,true,true,false,true], r:'fail' },
+    2:  { p:[true,true,true,true,true], r:'ideal' },
+    3:  { p:[true,true,true,false,false], r:'success' },
+    4:  { p:[false,false,true,false,true], r:'fail' },
+    5:  { p:[true,true,true,false,true], r:'success' },
+    6:  { p:[true,true,true,true,true], r:'fail', note:'يوم فاشل رغم العلامات' },
+    7:  { p:[true,true,true,true,true], r:'success' },
+    8:  { p:[true,true,true,false,true], r:'success' },
+    9:  { p:[true,true,true,true,true], r:'ideal' },
+    10: { p:[true,false,true,false,false], r:'success' },
+    11: { p:[true,true,true,false,true], r:'success' },
+    12: { p:[true,false,false,true,false], r:'success' },
+    13: { p:[true,true,false,false,true], r:'success', note:'تعبت وزكمت يومين' },
+    14: { p:[false,true,true,true,true], r:'fail' },
+    15: { p:[true,false,true,true,true], r:'success' },
+    29: { p:[true,true,true,true,true], r:'excused' },
+    30: { p:[true,false,true,true,true], r:'success' },
+    31: { p:[true,true,true,true,true], r:'ideal' },
+    32: { p:[true,true,true,true,true], r:'ideal' },
+    33: { p:[true,false,true,true,true], r:'success' },
+    34: { p:[false,false,true,false,true], r:'fail' },
+    35: { p:[true,true,true,true,false], r:'fail', note:'ما فيه شاحن' },
+    36: { p:[false,true,false,false,false], r:'fail' },
+    37: { p:[true,true,true,true,true], r:'fail' },
+    38: { p:[false,false,false,false,false], r:'fail', note:'من ذي النقطة ما رح يكون فيه توقف' },
+    39: { p:[true,true,true,true,true], r:'ideal' },
+    40: { p:[true,true,true,true,true], r:'ideal' },
+    41: { p:[true,true,true,true,true], r:'fail', note:'يوم سيء وأنت تعرف' },
+    42: { p:[true,true,true,true,true], r:'success' },
+    43: { p:[true,false,true,true,false], r:'success' },
+    44: { p:[true,false,true,true,true], r:'success' },
+    45: { p:[true,true,true,true,true], r:'ideal', note:'نصف الرحلة 🫡' },
+    46: { p:[true,true,false,false,true], r:'fail', note:'من أكسل الأيام' },
+    47: { p:[true,true,true,true,true], r:'success' },
+    48: { p:[true,true,true,true,true], r:'fail' },
+    49: { p:[false,true,true,false,true], r:'success', note:'يوم تخطيطي' },
+    50: { p:[true,true,true,true,true], r:'fail' },
+    51: { p:[true,true,true,true,true], r:'success' },
+    52: { p:[true,true,true,true,true], r:'ideal' },
+    53: { p:[true,true,true,true,true], r:'success' },
+    54: { p:[true,true,true,true,true], r:'success' },
+    55: { p:[true,true,true,false,true], r:'success' },
+    56: { p:[true,true,false,false,false], r:'fail' },
+    57: { p:[true,true,true,true,true], r:'success' },
+    58: { p:[true,true,true,true,true], r:'ideal' },
+    59: { p:[true,true,false,false,false], r:'success' },
+    60: { p:[false,false,false,false,false], r:'fail' },
+    61: { p:[false,false,true,true,false], r:'fail' },
+    62: { p:[false,false,true,true,true], r:'excused' },
+    63: { p:[true,true,true,true,true], r:'success' },
+    64: { p:[true,true,true,true,true], r:'success' },
+    65: { p:[true,true,true,true,true], r:'fail', note:'يوم محبط' },
+  };
+  for (const [dn, v] of Object.entries(seed)) {
+    const date = dayNumToISO(parseInt(dn));
+    data.days[date] = {
+      dayNum: parseInt(dn),
+      priorities: v.p,
+      rating: v.r,
+      note: v.note || '',
+      savedAt: new Date().toISOString(),
+    };
+  }
+  // Seed dreams
+  data.dreams = [
+    {
+      id: Date.now() - 4000,
+      title: 'أخيرًا لقيتك',
+      mood: 'قوي',
+      body: 'أنا موجود بمكان شوي ضبابي ومظلم، لكن قاعد في كرسي المدرسة، أنا بالصف الأول.\n\nاللي صار فجأة: ولد أبيض حلو، ذو وجه جميل، جاني من العدم وقال لي: "أخيرًا لقيتك".\n\nبمجرد ما قالها حسيت بشعور فاقده، حسيت بنفس إحساسه، وكأني قاعد أقول بداخلي: "وأخيرًا لقيتك أنت بعد".\n\nأحس كأننا كنا ندور على بعض من زمان. شعوري كان لا يوصف. حسيت بالانتماء. كأني رجعت فعليًا للمكان اللي أبيه وأحتاجه.\n\nبعدها جلس علي، وزاد الشعور قوة، حسيت أنه أنا وهو جسد واحد المفترض. للحين أحس بالمشاعر وأتذكرها.',
+      date: new Date().toISOString(),
+    },
+    {
+      id: Date.now() - 3000,
+      title: 'Resident Evil 4 — أبو لحية',
+      mood: 'غريب',
+      body: 'ريزدنت ايفل 4 وضع ليلي. رحت ودرت وفريت، وبالأخير لقيت أبو لحية، جيت ألاحقه وضربته، ثم بعدها يبعد عني مرة، ثم صرت أسرع 4x وضربت 9 مرات تقريبًا بيدي مو بالسكين ومات.\n\nولكن أول ما مات، خش عشرين أبو لحية ثاني. طبعًا هو لحيته غير موجودة ولا أي شيء موجود، ولكن صوت المشي حق أبو لحية هو اللي خلاني أقتل أبو لحية.\n\nخش أربعة أبو لحية تقريبًا، والأول اللي مات طلع منه آيتم لونه أزرق. ركضت بسرعة وأخذته، وطلع الجرعة الخضراء حقت النار في دارك سولز 3، ولكن فيها شيء زي الشجر الأخضر مغطيها، فيها فساد يعني.\n\nقلت بنفسي: ما يستاهل المشاوير اللي أخذته، وآخرتها أحصل ذي.',
+      date: new Date(Date.now() - 86400000).toISOString(),
+    },
+    {
+      id: Date.now() - 2000,
+      title: 'عمر ومنيفة وجدتي',
+      mood: 'غامض',
+      body: 'يبدأ الحلم وأنا جالس بجدار متكي عليه، قاعد أتكلم مع منيفة عن ما أدري إيش. عموماً كنت أحس بحر شديد، كانت الدفاية جنب جدتي بشوي، وجدتي تتقهوا وتضحك لي وتسوي حركاتها.\n\nعموماً أنا استغربت كيف تتقهوا وتضحك ومستناسة والدفاية جنبها، على الرغم من أني مرة أحس بحر.\n\nطلعت من الغرفة، قعدت أمشي شوي، وشفت عمر قاعد يكتب بالكتابة السريعة حقتي وهو جالس واللابتوب بيده. شفته شوي وقلت: ول يا السرعة.\n\nوبعده شفت بنته دليل تناظر، نظراتها الغريبة، وقعدت أدقق وأقول: وش ذا؟ كيف أكسرها وأكسر الخوف؟',
+      date: new Date(Date.now() - 172800000).toISOString(),
+    },
+    {
+      id: Date.now() - 1000,
+      title: 'سيارة من العدم',
+      mood: 'مخيف',
+      body: 'قاعد أسوق مسرع جدًا، متين كيلو، متين وخمسين. أتجاوز أتجاوز. فجأة تطلع سيارة من العدم. بس.',
+      date: new Date(Date.now() - 259200000).toISOString(),
+    }
+  ];
+  saveData();
+}
+
+/* ============ HELPERS ============ */
+function dayNumToISO(n) {
+  const d = new Date(START_DATE);
+  d.setDate(d.getDate() + (n - 1));
+  return d.toISOString().slice(0, 10);
+}
+function isoToDayNum(iso) {
+  const d = new Date(iso);
+  const diff = Math.floor((d - START_DATE) / 86400000);
+  return diff + 1;
+}
+function today() { return new Date().toISOString().slice(0,10); }
+function currentDayNum() { return isoToDayNum(today()); }
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function formatDateShort(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function computeRating(priorities) {
+  const count = priorities.filter(Boolean).length;
+  if (count === 5) return 'ideal';
+  if (count === 4) return 'success';
+  if (count === 3) return 'good';
+  return 'fail';
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll('#tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#tabs button').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById(b.dataset.tab).classList.add('active');
+    if (b.dataset.tab === 'stats') renderStats();
+    if (b.dataset.tab === 'dreams') renderDreams();
+    if (b.dataset.tab === 'checkin') renderCheckin();
+    if (b.dataset.tab === 'home') renderHome();
+    if (b.dataset.tab === 'habit') renderHabit();
+    if (b.dataset.tab === 'punishment') renderPunishment();
+    window.scrollTo(0, 0);
+  });
+});
+
+/* ============ CHECK-IN ============ */
+let checkinState = { priorities: [null,null,null,null,null], notes: ['','','','',''], rating: null, note: '' };
+
+function renderCheckin() {
+  const iso = today();
+  const dn = currentDayNum();
+  const existing = data.days[iso];
+
+  if (existing) {
+    checkinState = {
+      priorities: [...existing.priorities].map(v => v === true ? 'yes' : v === false ? 'no' : null),
+      notes: existing.notes || ['','','','',''],
+      rating: existing.rating,
+      note: existing.note || '',
+    };
+  } else {
+    checkinState = { priorities: [null,null,null,null,null], notes: ['','','','',''], rating: null, note: '' };
+  }
+
+  document.getElementById('todayDayNum').textContent = dn > 0 && dn <= TOTAL_DAYS ? dn : '—';
+  document.getElementById('todayFullDate').textContent = formatDate(iso);
+  document.getElementById('checkinDate').textContent = formatDateShort(iso);
+
+  const list = document.getElementById('prioritiesList');
+  list.innerHTML = '';
+  PRIORITIES.forEach((p, idx) => {
+    const state = checkinState.priorities[idx];
+    const note = checkinState.notes[idx] || '';
+    const el = document.createElement('div');
+    el.className = 'priority';
+    el.innerHTML = `
+      <div class="priority-num">${p.id}</div>
+      <div class="priority-body">
+        <div class="priority-title">${p.title}</div>
+        <div class="priority-desc">${p.desc}</div>
+        <div class="priority-actions">
+          <button class="btn-check ${state === 'yes' ? 'active success' : ''}" data-idx="${idx}" data-val="yes">✓</button>
+          <button class="btn-check ${state === 'no' ? 'active fail' : ''}" data-idx="${idx}" data-val="no">✗</button>
+        </div>
+        <textarea class="priority-note" data-idx="${idx}" placeholder="ملاحظة عن ${p.title}...">${note}</textarea>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+
+  list.querySelectorAll('.btn-check').forEach(b => {
+    b.addEventListener('click', () => {
+      const i = parseInt(b.dataset.idx);
+      const v = b.dataset.val;
+      checkinState.priorities[i] = checkinState.priorities[i] === v ? null : v;
+      renderCheckin(); // re-render to update
+    });
+  });
+  list.querySelectorAll('.priority-note').forEach(ta => {
+    ta.addEventListener('input', (e) => {
+      const i = parseInt(ta.dataset.idx);
+      checkinState.notes[i] = e.target.value;
+    });
+  });
+
+  // Rating
+  document.querySelectorAll('#ratingOptions .rating-btn').forEach(b => {
+    b.classList.toggle('active', checkinState.rating === b.dataset.rating);
+    b.onclick = () => {
+      checkinState.rating = b.dataset.rating;
+      renderCheckin();
+    };
+  });
+  document.getElementById('dayNote').value = checkinState.note;
+  document.getElementById('dayNote').oninput = e => checkinState.note = e.target.value;
+}
+
+document.getElementById('saveDayBtn').addEventListener('click', () => {
+  const iso = today();
+  const dn = currentDayNum();
+  const priorities = checkinState.priorities.map(v => v === 'yes' ? true : v === 'no' ? false : false);
+  const rating = checkinState.rating || computeRating(priorities);
+  data.days[iso] = {
+    dayNum: dn,
+    priorities,
+    rating,
+    notes: checkinState.notes,
+    note: checkinState.note,
+    savedAt: new Date().toISOString(),
+  };
+  saveData();
+  toast('تم حفظ اليوم · Saved');
+  renderHome();
+});
+
+/* ============ HOME ============ */
+function renderHome() {
+  const dn = Math.max(1, Math.min(TOTAL_DAYS, currentDayNum()));
+  const allDays = Object.values(data.days);
+  document.getElementById('dayCurrent').textContent = dn;
+  document.getElementById('dayRemaining').textContent = Math.max(0, TOTAL_DAYS - dn);
+  document.getElementById('dayPercent').textContent = Math.round((dn / TOTAL_DAYS) * 100) + '%';
+
+  const success = allDays.filter(d => ['ideal','success','good'].includes(d.rating)).length;
+  document.getElementById('successCount').textContent = success;
+
+  const ideal = allDays.filter(d => d.rating === 'ideal').length;
+  document.getElementById('idealCount').textContent = ideal;
+
+  const streaks = calcStreaks();
+  document.getElementById('streakCount').textContent = streaks.current;
+  document.getElementById('bestStreak').textContent = streaks.best;
+  document.getElementById('habitStreakHome').textContent = calcHabitStats().currentStreak;
+
+  document.getElementById('homeDate').textContent = formatDateShort(today());
+
+  renderDaysGrid('homeDaysGrid');
+}
+
+function renderDaysGrid(containerId) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  const todayNum = currentDayNum();
+  for (let i = 1; i <= TOTAL_DAYS; i++) {
+    const iso = dayNumToISO(i);
+    const day = data.days[iso];
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    if (i === todayNum) cell.classList.add('today');
+    cell.textContent = i;
+    if (day) {
+      cell.classList.add('d-' + day.rating);
+      cell.title = `Day ${i} — ${formatDateShort(iso)} — ${day.rating}`;
+      cell.onclick = () => openDayModal(iso);
+    } else {
+      cell.title = `Day ${i} — ${formatDateShort(iso)} — لم يُسجّل`;
+    }
+    el.appendChild(cell);
+  }
+}
+
+function calcStreaks() {
+  const sorted = Object.values(data.days).sort((a,b) => a.dayNum - b.dayNum);
+  let current = 0, best = 0, run = 0, lastDay = -2;
+  for (const d of sorted) {
+    const ok = ['ideal','success','good','excused'].includes(d.rating);
+    if (ok && d.dayNum === lastDay + 1) { run++; } else if (ok) { run = 1; } else { run = 0; }
+    if (run > best) best = run;
+    lastDay = d.dayNum;
+  }
+  // current streak is last run if latest day is recent
+  current = run;
+  return { current, best };
+}
+
+function openDayModal(iso) {
+  const day = data.days[iso];
+  if (!day) return;
+  const ratingMap = { ideal: 'يوم مثالي', success: 'يوم ناجح', good: 'يوم جيد', fail: 'يوم فاشل', excused: 'يوم معذور' };
+  const html = `
+    <button class="modal-close" onclick="document.getElementById('dayModal').classList.remove('show')">×</button>
+    <h3>Day ${day.dayNum} · ${ratingMap[day.rating] || day.rating}</h3>
+    <div class="section-sub" style="margin-bottom:1.5rem;">${formatDate(iso)}</div>
+    ${PRIORITIES.map((p,i) => `
+      <div style="padding: .8rem 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem;">
+        <div>
+          <div style="font-weight: 500;">${p.id}. ${p.title}</div>
+          ${day.notes && day.notes[i] ? `<div style="color: var(--ink-dim); font-size: .85rem; margin-top: .3rem;">${day.notes[i]}</div>` : ''}
+        </div>
+        <div style="color: ${day.priorities[i] ? 'var(--success)' : 'var(--fail)'}; font-size: 1.3rem;">${day.priorities[i] ? '✓' : '✗'}</div>
+      </div>
+    `).join('')}
+    ${day.note ? `<div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-2); border-radius: 4px; color: var(--ink-dim); line-height: 1.7;">${day.note}</div>` : ''}
+  `;
+  document.getElementById('dayModalContent').innerHTML = html;
+  document.getElementById('dayModal').classList.add('show');
+}
+document.getElementById('dayModal').addEventListener('click', (e) => {
+  if (e.target.id === 'dayModal') e.target.classList.remove('show');
+});
+
+/* ============ STATS ============ */
+function renderStats() {
+  const all = Object.values(data.days);
+  document.getElementById('s_total').textContent = all.length;
+  const rate = all.length ? Math.round(all.filter(d => ['ideal','success','good'].includes(d.rating)).length / all.length * 100) : 0;
+  document.getElementById('s_rate').textContent = rate + '%';
+  document.getElementById('s_good').textContent = all.filter(d => ['ideal','success','good'].includes(d.rating)).length;
+  document.getElementById('s_fail').textContent = all.filter(d => d.rating === 'fail').length;
+
+  // Priority bars
+  const bars = document.getElementById('priorityStats');
+  bars.innerHTML = '';
+  PRIORITIES.forEach((p, i) => {
+    const hits = all.filter(d => d.priorities[i]).length;
+    const pct = all.length ? Math.round(hits / all.length * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label">${p.id}. ${p.title}</div>
+      <div class="bar-track"><div class="bar-fill" style="width: ${pct}%"></div></div>
+      <div class="bar-value">${pct}%</div>
+    `;
+    bars.appendChild(row);
+  });
+
+  renderDaysGrid('statsDaysGrid');
+}
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `90days-export-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('تم التصدير · Exported');
+});
+
+/* ============ DREAMS ============ */
+let selectedMood = null;
+document.querySelectorAll('#moodPicker .mood-pill').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#moodPicker .mood-pill').forEach(x => x.classList.remove('active'));
+    if (selectedMood === b.dataset.mood) {
+      selectedMood = null;
+    } else {
+      selectedMood = b.dataset.mood;
+      b.classList.add('active');
+    }
+  });
+});
+
+document.getElementById('saveDreamBtn').addEventListener('click', () => {
+  const title = document.getElementById('dreamTitle').value.trim();
+  const body = document.getElementById('dreamBody').value.trim();
+  if (!title || !body) { toast('اكتب عنوان وتفاصيل'); return; }
+  const dream = {
+    id: Date.now(),
+    title,
+    body,
+    mood: selectedMood || 'غير محدد',
+    date: new Date().toISOString(),
+  };
+  data.dreams.unshift(dream);
+  saveData();
+  document.getElementById('dreamTitle').value = '';
+  document.getElementById('dreamBody').value = '';
+  selectedMood = null;
+  document.querySelectorAll('#moodPicker .mood-pill').forEach(x => x.classList.remove('active'));
+  toast('تم حفظ الحلم');
+  renderDreams();
+});
+
+function renderDreams() {
+  const list = document.getElementById('dreamsList');
+  list.innerHTML = '';
+  if (data.dreams.length === 0) {
+    list.innerHTML = '<div class="empty-state">لم تُسجّل أي أحلام بعد</div>';
+    return;
+  }
+  data.dreams.forEach((d, idx) => {
+    const card = document.createElement('div');
+    card.className = 'dream-card';
+    card.innerHTML = `
+      <div class="dream-head">
+        <div class="dream-title">${escapeHtml(d.title)}</div>
+        <div class="dream-date">${formatDateShort(d.date)}</div>
+      </div>
+      <div class="dream-mood">${escapeHtml(d.mood)}</div>
+      <div class="dream-body" id="db-${d.id}">${escapeHtml(d.body)}</div>
+      <div class="dream-actions">
+        <button class="dream-btn" onclick="toggleDream('${d.id}')">عرض الكامل</button>
+        <button class="dream-btn danger" onclick="deleteDream(${d.id})">حذف</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+window.toggleDream = (id) => {
+  document.getElementById('db-' + id).classList.toggle('expanded');
+};
+window.deleteDream = (id) => {
+  if (!confirm('حذف الحلم؟')) return;
+  data.dreams = data.dreams.filter(d => d.id !== id);
+  saveData();
+  renderDreams();
+  toast('تم الحذف');
+};
+
+/* ============ HABIT TRACKER ============ */
+function renderHabit() {
+  // Set name
+  const nameInput = document.getElementById('habitName');
+  nameInput.value = data.habit.name || 'Goal Battles';
+  nameInput.oninput = (e) => {
+    data.habit.name = e.target.value || 'العادة';
+    saveData();
+  };
+
+  const log = data.habit.log || {};
+  const todayISO = today();
+  const todayStatus = log[todayISO]; // 'clean' | 'relapse' | undefined
+
+  // Calculate current streak (consecutive clean days ending at last logged day)
+  const stats = calcHabitStats();
+
+  document.getElementById('habitCounter').textContent = stats.currentStreak;
+  document.getElementById('habitUnit').textContent = stats.currentStreak === 1 ? 'يوم · Day' : 'يوم · Days';
+  document.getElementById('habit_longest').textContent = stats.longest;
+  document.getElementById('habit_current').textContent = stats.currentStreak;
+  document.getElementById('habit_clean_total').textContent = stats.totalClean;
+  document.getElementById('habit_relapses').textContent = stats.relapses;
+
+  // Status text
+  const statusEl = document.getElementById('habitStatusText');
+  if (todayStatus === 'clean') {
+    statusEl.textContent = '✓ سجّلت اليوم نظيف';
+    statusEl.style.color = 'var(--success)';
+  } else if (todayStatus === 'relapse') {
+    statusEl.textContent = '✗ سجّلت انزلاق اليوم';
+    statusEl.style.color = 'var(--fail)';
+  } else {
+    statusEl.textContent = 'لم تسجّل اليوم بعد';
+    statusEl.style.color = 'var(--ink-dim)';
+  }
+
+  // Button states
+  const cleanBtn = document.getElementById('markCleanBtn');
+  const relapseBtn = document.getElementById('markRelapseBtn');
+  cleanBtn.classList.toggle('checked', todayStatus === 'clean');
+  relapseBtn.classList.toggle('checked', todayStatus === 'relapse');
+
+  cleanBtn.onclick = () => {
+    data.habit.log[todayISO] = 'clean';
+    saveData();
+    renderHabit();
+    renderHome();
+    toast('✓ يوم نظيف');
+  };
+  relapseBtn.onclick = () => {
+    if (!confirm('تأكيد: انزلقت اليوم؟ هذا سيكسر السلسلة')) return;
+    data.habit.log[todayISO] = 'relapse';
+    saveData();
+    renderHabit();
+    renderHome();
+    toast('تم التسجيل · ابدأ من جديد');
+  };
+
+  // Log list
+  const list = document.getElementById('habitLogList');
+  const entries = Object.entries(log).sort((a,b) => b[0].localeCompare(a[0]));
+  if (entries.length === 0) {
+    list.innerHTML = '<div class="empty-state" style="padding:2rem;">لم يتم التسجيل بعد</div>';
+  } else {
+    list.innerHTML = entries.map(([iso, status]) => `
+      <div class="habit-log-item">
+        <div class="habit-log-date">${formatDateShort(iso)}</div>
+        <div>
+          <span class="habit-log-status ${status}">${status === 'clean' ? '✓ نظيف' : '✗ انزلاق'}</span>
+          <button class="habit-log-delete" onclick="deleteHabitLog('${iso}')">×</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Reset button
+  document.getElementById('habitResetBtn').onclick = () => {
+    if (!confirm('تصفير كل بيانات العادة؟ لا يمكن التراجع')) return;
+    data.habit.log = {};
+    saveData();
+    renderHabit();
+    toast('تم التصفير');
+  };
+}
+
+function calcHabitStats() {
+  const log = data.habit.log || {};
+  const entries = Object.entries(log).sort((a,b) => a[0].localeCompare(b[0]));
+  let totalClean = 0, relapses = 0, longest = 0, run = 0;
+  for (const [iso, status] of entries) {
+    if (status === 'clean') {
+      totalClean++;
+      run++;
+      if (run > longest) longest = run;
+    } else if (status === 'relapse') {
+      relapses++;
+      run = 0;
+    }
+  }
+  // Current streak = consecutive clean days ending today or the last logged day
+  let currentStreak = 0;
+  const todayISO = today();
+  let cursor = new Date(todayISO);
+  // Walk backwards from today
+  while (true) {
+    const iso = cursor.toISOString().slice(0,10);
+    const status = log[iso];
+    if (status === 'clean') {
+      currentStreak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else if (status === 'relapse') {
+      break;
+    } else {
+      // If no entry today yet, continue looking back — current streak = last run before today
+      if (iso === todayISO) {
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+  }
+  return { totalClean, relapses, longest, currentStreak };
+}
+
+window.deleteHabitLog = (iso) => {
+  if (!confirm('حذف هذا التسجيل؟')) return;
+  delete data.habit.log[iso];
+  saveData();
+  renderHabit();
+};
+
+/* ============ PUNISHMENT SYSTEM ============ */
+/*
+  Rules:
+  - Work: 8h/day target. Each missed hour = 4min plank + pushups-to-failure (1 set per hour)
+  - Exercise/Food: missed = 4min plank + pushups-to-failure × 2 sets
+  - Cleaning: missed = 2min plank + pushups-to-failure × 1 set
+  - Sleep: no punishment
+  - Social: missed = send a message in group (any message)
+  - Start date: the day user first opened this system (today). Old days don't count.
+  Accumulation: if a day has <8h work, remaining hours add to overall debt.
+*/
+const WORK_TARGET_HOURS = 8;
+const PUN_START_KEY = 'ninDays_punStart';
+
+function getPunishmentStartDate() {
+  let stored = localStorage.getItem(PUN_START_KEY);
+  if (!stored) {
+    stored = today(); // Save today as the start date
+    localStorage.setItem(PUN_START_KEY, stored);
+  }
+  return stored;
+}
+
+// Timer state (in-memory, persisted via localStorage)
+let timerState = {
+  running: false,
+  startTime: null, // ms
+  elapsedToday: 0, // seconds, not yet committed
+  tickInterval: null,
+};
+
+function loadTimerState() {
+  try {
+    const raw = localStorage.getItem('ninDays_timerState');
+    if (raw) {
+      const s = JSON.parse(raw);
+      // If it was running, compute accumulated
+      if (s.running && s.startTime) {
+        const now = Date.now();
+        const addSec = Math.floor((now - s.startTime) / 1000);
+        s.accumulatedSec = (s.accumulatedSec || 0) + addSec;
+        s.startTime = now;
+      }
+      return s;
+    }
+  } catch(e) {}
+  return { running: false, startTime: null, accumulatedSec: 0 };
+}
+
+function saveTimerState(s) {
+  localStorage.setItem('ninDays_timerState', JSON.stringify(s));
+}
+
+let tState = loadTimerState();
+
+function formatHM(hours) {
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  return `${h}h ${m}m`;
+}
+
+function formatHMS(totalSec) {
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = Math.floor(totalSec % 60);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function getTodayWorkedHours() {
+  const iso = today();
+  const committed = data.punishment.workLog[iso] || 0;
+  const pending = (tState.accumulatedSec || 0) / 3600;
+  return committed + pending;
+}
+
+function commitTimerToDay() {
+  if (!tState.accumulatedSec || tState.accumulatedSec < 1) return;
+  const iso = today();
+  const hoursToAdd = tState.accumulatedSec / 3600;
+  data.punishment.workLog[iso] = (data.punishment.workLog[iso] || 0) + hoursToAdd;
+  tState.accumulatedSec = 0;
+  saveTimerState(tState);
+  saveData();
+}
+
+function startTimer() {
+  if (tState.running) return;
+  tState.running = true;
+  tState.startTime = Date.now();
+  saveTimerState(tState);
+  document.getElementById('timerStartBtn').style.display = 'none';
+  document.getElementById('timerPauseBtn').style.display = '';
+  document.getElementById('timerDisplay').classList.add('running');
+  startTimerTick();
+}
+
+function pauseTimer() {
+  if (!tState.running) return;
+  const now = Date.now();
+  tState.accumulatedSec = (tState.accumulatedSec || 0) + (now - tState.startTime) / 1000;
+  tState.running = false;
+  tState.startTime = null;
+  saveTimerState(tState);
+  commitTimerToDay();
+  document.getElementById('timerStartBtn').style.display = '';
+  document.getElementById('timerPauseBtn').style.display = 'none';
+  document.getElementById('timerDisplay').classList.remove('running');
+  stopTimerTick();
+  renderPunishment();
+}
+
+function startTimerTick() {
+  stopTimerTick();
+  timerState.tickInterval = setInterval(updateTimerDisplay, 1000);
+  updateTimerDisplay();
+}
+function stopTimerTick() {
+  if (timerState.tickInterval) clearInterval(timerState.tickInterval);
+  timerState.tickInterval = null;
+}
+
+function updateTimerDisplay() {
+  const display = document.getElementById('timerDisplay');
+  if (!display) return;
+  let totalSec = tState.accumulatedSec || 0;
+  if (tState.running && tState.startTime) {
+    totalSec += (Date.now() - tState.startTime) / 1000;
+  }
+  // Show this session only on timer
+  display.textContent = formatHMS(totalSec);
+  const todayWorked = getTodayWorkedHours();
+  document.getElementById('todayWorkedStr').textContent = formatHM(todayWorked);
+  document.getElementById('todayRemainingStr').textContent = formatHM(Math.max(0, WORK_TARGET_HOURS - todayWorked));
+}
+
+function addManualHours() {
+  const input = document.getElementById('manualHours');
+  const v = parseFloat(input.value);
+  if (!v || v <= 0) { toast('أدخل قيمة صحيحة'); return; }
+  const iso = today();
+  data.punishment.workLog[iso] = (data.punishment.workLog[iso] || 0) + v;
+  saveData();
+  input.value = '';
+  renderPunishment();
+  toast(`تم إضافة ${v} ساعة`);
+}
+
+function resetTodayWork() {
+  if (!confirm('تصفير ساعات الشغل لليوم؟')) return;
+  const iso = today();
+  delete data.punishment.workLog[iso];
+  tState.accumulatedSec = 0;
+  tState.running = false;
+  tState.startTime = null;
+  saveTimerState(tState);
+  saveData();
+  renderPunishment();
+  toast('تم التصفير');
+}
+
+/* Debt calculation */
+function calcTotalDebt() {
+  // Sum of work debt from punishment start date (not day 1) up to today
+  let workDebtHours = 0;
+  const todayISO = today();
+  const workLog = data.punishment.workLog || {};
+  const startDate = new Date(getPunishmentStartDate());
+  startDate.setHours(0,0,0,0);
+  const now = new Date(todayISO);
+  now.setHours(0,0,0,0);
+
+  for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
+    const iso = d.toISOString().slice(0,10);
+    const worked = workLog[iso] || 0;
+    const paid = getPaidHoursForDay(iso);
+    const missed = Math.max(0, WORK_TARGET_HOURS - worked);
+    const remaining = Math.max(0, missed - paid);
+    workDebtHours += remaining;
+  }
+  return workDebtHours;
+}
+
+function getPaidHoursForDay(iso) {
+  // Paid sessions are global — but we track total paid vs total owed.
+  // Simpler: track total paid hours (across all days) and apply against total owed.
+  return 0; // handled globally
+}
+
+function getTotalPaid() {
+  return (data.punishment.paidSessions || []).reduce((s, p) => s + (p.hours || 0), 0);
+}
+
+function getTotalOwedWork() {
+  let total = 0;
+  const workLog = data.punishment.workLog || {};
+  const todayISO = today();
+  const startDate = new Date(getPunishmentStartDate());
+  startDate.setHours(0,0,0,0);
+  const now = new Date(todayISO);
+  now.setHours(0,0,0,0);
+
+  for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
+    const iso = d.toISOString().slice(0,10);
+    const worked = workLog[iso] || 0;
+    const missed = Math.max(0, WORK_TARGET_HOURS - worked);
+    total += missed;
+  }
+  return total;
+}
+
+function getNetWorkDebt() {
+  return Math.max(0, getTotalOwedWork() - getTotalPaid());
+}
+
+/* Priority-based punishments (exercise, food, cleaning, social) for today */
+function getTodayPriorityPunishments() {
+  const iso = today();
+  const day = data.days[iso];
+  const override = data.punishment.manualOverrides[iso] || {};
+
+  const getPriorityStatus = (idx) => {
+    if (override[idx] !== undefined) return override[idx]; // user-set
+    if (!day || !day.priorities) return null;
+    return day.priorities[idx]; // true=done, false=missed
+  };
+
+  const punishments = [];
+  // p[0]=work, p[1]=social, p[2]=body(exercise+food), p[3]=sleep, p[4]=cleaning
+  // Social (index 1)
+  const socialStatus = getPriorityStatus(1);
+  if (socialStatus === false) {
+    punishments.push({
+      key: 'social',
+      idx: 1,
+      label: 'التعرّض الاجتماعي',
+      detail: 'أرسل رسالة في القروب (أي رسالة)',
+      type: 'message',
+      status: socialStatus,
+    });
+  }
+  // Body (index 2) — exercise + food
+  const bodyStatus = getPriorityStatus(2);
+  if (bodyStatus === false) {
+    punishments.push({
+      key: 'body',
+      idx: 2,
+      label: 'الجسم · تمرين + أكل',
+      detail: '4 دقائق بلانك + بوش اب للفشل × 2',
+      type: 'exercise',
+      plank: 4,
+      pushupSets: 2,
+      status: bodyStatus,
+    });
+  }
+  // Cleaning (index 4)
+  const cleanStatus = getPriorityStatus(4);
+  if (cleanStatus === false) {
+    punishments.push({
+      key: 'clean',
+      idx: 4,
+      label: 'النظافة',
+      detail: '2 دقائق بلانك + بوش اب للفشل × 1',
+      type: 'exercise',
+      plank: 2,
+      pushupSets: 1,
+      status: cleanStatus,
+    });
+  }
+  return punishments;
+}
+
+/* Session state */
+let currentSession = null; // {type: 'work', hours, exercises: [...]}
+
+function buildWorkSession(hours) {
+  const exercises = [];
+  for (let i = 1; i <= hours; i++) {
+    exercises.push({ id: `plank-${i}`, label: `الساعة ${i} — بلانك 4 دقائق`, done: false });
+    exercises.push({ id: `push-${i}`, label: `الساعة ${i} — بوش اب للفشل العضلي`, done: false });
+  }
+  return { type: 'work', hours, exercises };
+}
+
+function startPaySession(hours) {
+  currentSession = buildWorkSession(hours);
+  renderActiveSession();
+}
+
+function renderActiveSession() {
+  const box = document.getElementById('activeSession');
+  if (!currentSession) {
+    box.style.display = 'none';
+    return;
+  }
+  box.style.display = '';
+  const container = document.getElementById('sessionExercises');
+  container.innerHTML = currentSession.exercises.map((ex, i) => `
+    <div class="exercise-row ${ex.done ? 'done' : ''}">
+      <div class="exercise-label">${ex.label}</div>
+      <button class="exercise-check ${ex.done ? 'checked' : ''}" onclick="toggleExercise(${i})">${ex.done ? '✓' : ''}</button>
+    </div>
+  `).join('');
+
+  const allDone = currentSession.exercises.every(e => e.done);
+  const btn = document.getElementById('sessionCompleteBtn');
+  btn.disabled = !allDone;
+  btn.textContent = allDone ? 'سجّل الجلسة · Complete' : `أكمل التمارين أولاً (${currentSession.exercises.filter(e=>e.done).length}/${currentSession.exercises.length})`;
+
+  // scroll to it
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+window.toggleExercise = (i) => {
+  if (!currentSession) return;
+  currentSession.exercises[i].done = !currentSession.exercises[i].done;
+  renderActiveSession();
+};
+
+function completeSession() {
+  if (!currentSession) return;
+  if (!currentSession.exercises.every(e => e.done)) {
+    toast('أكمل كل التمارين');
+    return;
+  }
+  // Log paid session
+  const entry = {
+    iso: today(),
+    hours: currentSession.hours,
+    timestamp: Date.now(),
+  };
+  data.punishment.paidSessions = data.punishment.paidSessions || [];
+  data.punishment.paidSessions.push(entry);
+  saveData();
+  currentSession = null;
+  renderActiveSession();
+  renderPunishment();
+  toast(`تم تسديد ${entry.hours} ساعات ✓`);
+}
+
+function markPriorityPaid(key, idx) {
+  const iso = today();
+  if (!data.punishment.manualOverrides[iso]) data.punishment.manualOverrides[iso] = {};
+  data.punishment.manualOverrides[iso][idx] = true; // treat as done
+  if (!data.punishment.debtHistory[iso]) data.punishment.debtHistory[iso] = {};
+  data.punishment.debtHistory[iso][key + 'Paid'] = true;
+  saveData();
+  renderPunishment();
+  toast(`تم تسديد ${key}`);
+}
+
+/* Main render */
+function renderPunishment() {
+  const netDebt = getNetWorkDebt();
+  const totalOwed = getTotalOwedWork();
+  const totalPaid = getTotalPaid();
+  const priorityPuns = getTodayPriorityPunishments();
+
+  // Banner
+  const banner = document.getElementById('punBanner');
+  const bannerLabel = document.getElementById('punBannerLabel');
+  const bannerTitle = document.getElementById('punBannerTitle');
+  const bannerSub = document.getElementById('punBannerSub');
+
+  if (netDebt === 0 && priorityPuns.length === 0) {
+    banner.classList.add('clean');
+    bannerLabel.textContent = '✓ حرّ من الدين · Debt Free';
+    bannerTitle.innerHTML = `<span class="accent-num">0</span> دين`;
+    bannerSub.textContent = 'لا عقوبات مستحقة. أكمل على هذا النهج.';
+  } else {
+    banner.classList.remove('clean');
+    bannerLabel.textContent = 'دين مستحق · Outstanding Debt';
+    const plankTotal = netDebt * 4;
+    const setTotal = Math.ceil(netDebt);
+    bannerTitle.innerHTML = `<span class="accent-num">${netDebt.toFixed(1)}</span> ساعة`;
+    bannerSub.textContent = `تعادل ${plankTotal.toFixed(0)} دقيقة بلانك + ${setTotal} جلسة بوش اب للفشل`;
+  }
+
+  // Timer display
+  updateTimerDisplay();
+  if (tState.running) {
+    document.getElementById('timerStartBtn').style.display = 'none';
+    document.getElementById('timerPauseBtn').style.display = '';
+    document.getElementById('timerDisplay').classList.add('running');
+    startTimerTick();
+  } else {
+    document.getElementById('timerStartBtn').style.display = '';
+    document.getElementById('timerPauseBtn').style.display = 'none';
+    document.getElementById('timerDisplay').classList.remove('running');
+  }
+
+  // Debts list
+  document.getElementById('debtTotalMini').textContent = netDebt > 0 ? `${netDebt.toFixed(1)}h دين` : '✓ نظيف';
+  const debtsList = document.getElementById('debtsList');
+  const todayWorked = getTodayWorkedHours();
+  const todayMissed = Math.max(0, WORK_TARGET_HOURS - todayWorked);
+
+  const items = [];
+
+  // Work today
+  items.push(`
+    <div class="debt-item ${todayMissed === 0 ? 'paid' : ''}">
+      <div class="debt-icon">1</div>
+      <div class="debt-info">
+        <div class="debt-label">الشغل اليوم</div>
+        <div class="debt-detail">
+          ${formatHM(todayWorked)} / 8h
+          ${todayMissed > 0 ? `<span class="plus"> · نقص ${formatHM(todayMissed)} = ${(todayMissed*4).toFixed(0)}د بلانك + ${Math.ceil(todayMissed)} جلسة</span>` : ''}
+        </div>
+      </div>
+      <div style="color:${todayMissed === 0 ? 'var(--success)' : 'var(--fail)'};font-size:1.2rem;">${todayMissed === 0 ? '✓' : '✗'}</div>
+    </div>
+  `);
+
+  // Accumulated from previous days
+  const prevDebt = netDebt - todayMissed + (totalPaid > (totalOwed - todayMissed) ? (totalPaid - (totalOwed - todayMissed)) : 0);
+  const accDebt = Math.max(0, getTotalOwedWork() - todayMissed - totalPaid);
+  if (accDebt > 0) {
+    items.push(`
+      <div class="debt-item">
+        <div class="debt-icon">+</div>
+        <div class="debt-info">
+          <div class="debt-label">دين متراكم من أيام سابقة</div>
+          <div class="debt-detail">
+            ${formatHM(accDebt)} لم يُسدَّد
+            <span class="plus"> · ${(accDebt*4).toFixed(0)}د بلانك + ${Math.ceil(accDebt)} جلسة</span>
+          </div>
+        </div>
+        <div style="color:var(--fail);font-size:1.2rem;">✗</div>
+      </div>
+    `);
+  }
+
+  // Paid summary
+  if (totalPaid > 0) {
+    items.push(`
+      <div class="debt-item paid">
+        <div class="debt-icon">✓</div>
+        <div class="debt-info">
+          <div class="debt-label">مسدَّد</div>
+          <div class="debt-detail">${formatHM(totalPaid)} تم تسديدها</div>
+        </div>
+        <div style="color:var(--success);font-size:1.2rem;">✓</div>
+      </div>
+    `);
+  }
+
+  debtsList.innerHTML = items.join('');
+
+  // Pay options (1, 2, 3, 4 hours)
+  const payOptions = document.getElementById('payOptions');
+  const opts = [1, 2, 3, 4];
+  payOptions.innerHTML = opts.map(h => `
+    <button class="pay-option" onclick="startPaySession(${h})" ${h > netDebt ? 'disabled' : ''}>
+      <span class="pay-hours">${h}h</span>
+      <span class="pay-label">${(h*4)}د بلانك + ${h} جلسات</span>
+    </button>
+  `).join('');
+  if (netDebt === 0) {
+    payOptions.innerHTML = '<div style="padding:1rem;color:var(--ink-mute);font-style:italic;text-align:center;width:100%;">لا يوجد دين للتسديد</div>';
+  }
+
+  // Priority punishments
+  const priBox = document.getElementById('priorityPunishments');
+  const priList = document.getElementById('priorityPunList');
+  if (priorityPuns.length === 0) {
+    priBox.style.display = 'none';
+  } else {
+    priBox.style.display = '';
+    priList.innerHTML = priorityPuns.map(p => {
+      if (p.type === 'message') {
+        return `
+          <div class="debt-item">
+            <div class="debt-icon">✉</div>
+            <div class="debt-info">
+              <div class="debt-label">${p.label}</div>
+              <div class="debt-detail">${p.detail}</div>
+            </div>
+            <button class="timer-btn" onclick="markPriorityPaid('${p.key}', ${p.idx})" style="min-width:100px;">أرسلت ✓</button>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="debt-item">
+            <div class="debt-icon">⚡</div>
+            <div class="debt-info">
+              <div class="debt-label">${p.label}</div>
+              <div class="debt-detail">${p.detail}</div>
+            </div>
+            <button class="timer-btn" onclick="startPriorityPunSession('${p.key}', ${p.idx}, ${p.plank}, ${p.pushupSets})" style="min-width:100px;">ابدأ الآن</button>
+          </div>
+        `;
+      }
+    }).join('');
+  }
+
+  // History
+  renderPunHistory();
+
+  // Active session
+  renderActiveSession();
+}
+
+window.startPriorityPunSession = (key, idx, plank, pushupSets) => {
+  const exercises = [];
+  exercises.push({ id: `plank-${key}`, label: `بلانك ${plank} دقائق`, done: false });
+  for (let s = 1; s <= pushupSets; s++) {
+    exercises.push({ id: `push-${key}-${s}`, label: `بوش اب للفشل العضلي (${s}/${pushupSets})`, done: false });
+  }
+  currentSession = { type: 'priority', key, idx, exercises };
+  renderActiveSession();
+  // Override complete behavior to mark the priority as paid
+  const origBtn = document.getElementById('sessionCompleteBtn');
+  origBtn.onclick = () => {
+    if (!currentSession.exercises.every(e => e.done)) { toast('أكمل التمارين'); return; }
+    markPriorityPaid(key, idx);
+    currentSession = null;
+    renderActiveSession();
+  };
+};
+
+window.startPaySession = startPaySession;
+
+function renderPunHistory() {
+  const container = document.getElementById('punHistory');
+  const workLog = data.punishment.workLog || {};
+  const paidSessions = data.punishment.paidSessions || [];
+  // Build per-day summary
+  const days = new Set([...Object.keys(workLog), ...paidSessions.map(p => p.iso)]);
+  const sortedDays = [...days].sort((a,b) => b.localeCompare(a));
+  if (sortedDays.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:1.5rem;">لا سجل بعد</div>';
+    return;
+  }
+  container.innerHTML = sortedDays.slice(0, 20).map(iso => {
+    const worked = workLog[iso] || 0;
+    const missed = Math.max(0, WORK_TARGET_HOURS - worked);
+    const paidToday = paidSessions.filter(p => p.iso === iso).reduce((s,p) => s + p.hours, 0);
+    return `
+      <div class="pun-history-item">
+        <div class="pun-history-date">${formatDateShort(iso)}</div>
+        <div class="pun-history-summary">
+          شغل: <strong>${formatHM(worked)}</strong>
+          ${missed > 0 ? `· <span class="debt">نقص ${formatHM(missed)}</span>` : ''}
+          ${paidToday > 0 ? `· <span class="paid">سدّد ${formatHM(paidToday)}</span>` : ''}
+        </div>
+        <div style="color:${missed === 0 || paidToday >= missed ? 'var(--success)' : 'var(--fail)'};font-size:1.2rem;">
+          ${missed === 0 || paidToday >= missed ? '✓' : '✗'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Wire up buttons
+function wirePunishmentButtons() {
+  const startBtn = document.getElementById('timerStartBtn');
+  if (startBtn) startBtn.onclick = startTimer;
+  const pauseBtn = document.getElementById('timerPauseBtn');
+  if (pauseBtn) pauseBtn.onclick = pauseTimer;
+  const resetBtn = document.getElementById('timerResetBtn');
+  if (resetBtn) resetBtn.onclick = resetTodayWork;
+  const manualBtn = document.getElementById('manualAddBtn');
+  if (manualBtn) manualBtn.onclick = addManualHours;
+  const completeBtn = document.getElementById('sessionCompleteBtn');
+  if (completeBtn) completeBtn.onclick = () => {
+    if (!currentSession) return;
+    if (currentSession.type === 'priority') {
+      // handled via custom onclick in startPriorityPunSession
+      if (!currentSession.exercises.every(e => e.done)) { toast('أكمل التمارين'); return; }
+      markPriorityPaid(currentSession.key, currentSession.idx);
+      currentSession = null;
+      renderActiveSession();
+    } else {
+      completeSession();
+    }
+  };
+}
+
+/* ============ INIT ============ */
+seedHistory();
+renderHome();
+renderCheckin();
+renderDreams();
+renderHabit();
+wirePunishmentButtons();
+renderPunishment();
+// If timer was running when page loaded, continue ticking
+if (tState.running) startTimerTick();
+</script>
+</body>
+</html>
