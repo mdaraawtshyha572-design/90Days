@@ -905,6 +905,310 @@
     font-weight: bold;
   }
 
+  /* ===== LUCID DREAMING ===== */
+  .lucid-intro {
+    background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .lucid-intro::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,169,106,.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .lucid-intro-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+  .lucid-intro-text {
+    color: var(--ink-dim);
+    line-height: 1.9;
+    font-size: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .lucid-intro-text .accent { color: var(--accent); font-weight: 500; }
+
+  .lucid-counter-card {
+    background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .lucid-counter-card.completed {
+    border-color: var(--success);
+    box-shadow: 0 0 40px -10px rgba(126,166,114,.25);
+  }
+  .lucid-counter-card.completed::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(126,166,114,.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .lucid-counter-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .lucid-counter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    color: var(--ink-mute);
+    margin-bottom: .4rem;
+  }
+  .lucid-counter-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink-dim);
+  }
+  .lucid-counter-target {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    color: var(--accent);
+    background: rgba(200,169,106,.08);
+    border: 1px solid var(--accent-soft);
+    padding: .4rem .8rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .lucid-counter-display {
+    text-align: center;
+    margin: 2rem 0 1.2rem;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1;
+  }
+  .lucid-counter-num {
+    font-size: 6rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color .3s;
+  }
+  .lucid-counter-card.completed .lucid-counter-num { color: var(--success); }
+  .lucid-counter-slash {
+    font-size: 4rem;
+    color: var(--ink-mute);
+    font-weight: 300;
+    margin: 0 .3rem;
+  }
+  .lucid-counter-total {
+    font-size: 3rem;
+    color: var(--ink-mute);
+  }
+  .lucid-progress-bar {
+    height: 6px;
+    background: var(--bg-2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1.8rem;
+    border: 1px solid var(--line);
+  }
+  .lucid-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-soft) 0%, var(--accent) 100%);
+    width: 0%;
+    transition: width .4s ease;
+    border-radius: 3px;
+  }
+  .lucid-counter-card.completed .lucid-progress-fill {
+    background: linear-gradient(90deg, var(--success) 0%, #9bbf8e 100%);
+  }
+  .lucid-counter-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: .6rem;
+  }
+  .lucid-rc-btn {
+    padding: 1rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .03em;
+  }
+  .lucid-rc-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .lucid-rc-btn:active { transform: translateY(0); }
+  .lucid-rc-btn.secondary {
+    background: var(--bg-2);
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+  }
+  .lucid-rc-btn.secondary:hover { color: var(--ink); border-color: var(--accent-soft); }
+  .lucid-rc-btn.danger {
+    background: transparent;
+    color: var(--fail);
+    border: 1px solid rgba(181,82,74,.3);
+  }
+  .lucid-rc-btn.danger:hover { background: rgba(181,82,74,.08); }
+  .lucid-counter-status {
+    margin-top: 1.2rem;
+    text-align: center;
+    color: var(--success);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    min-height: 1.4rem;
+  }
+
+  .lucid-attempt-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .lucid-attempt-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: .8rem;
+  }
+  .lucid-attempt-desc {
+    color: var(--ink-dim);
+    line-height: 1.8;
+    font-size: .95rem;
+    margin-bottom: 1.2rem;
+  }
+  .lucid-attempt-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+  }
+  .lucid-attempt-btn {
+    padding: 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .lucid-attempt-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+  .lucid-attempt-btn.active {
+    color: var(--success);
+    border-color: var(--success);
+    background: rgba(126,166,114,.08);
+  }
+
+  .lucid-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .lucid-stat-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+  }
+  .lucid-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: .6rem;
+  }
+  .lucid-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .lucid-stat-sub {
+    font-size: .75rem;
+    color: var(--ink-mute);
+  }
+
+  .lucid-history {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2rem;
+  }
+  .lucid-history h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+  }
+  .lucid-history-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .lucid-history-item:last-child { border-bottom: none; }
+  .lucid-history-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--ink-dim);
+    min-width: 80px;
+  }
+  .lucid-history-rc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  .lucid-history-rc .num {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .lucid-history-attempt {
+    font-size: .8rem;
+    color: var(--ink-mute);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .lucid-history-attempt.done { color: var(--success); }
+  .lucid-history-status {
+    color: var(--success);
+    font-size: 1.2rem;
+  }
+  .lucid-history-status.fail { color: var(--ink-mute); }
+
   /* ===== HABIT TRACKER ===== */
   .habit-hero {
     background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
@@ -1578,16 +1882,27 @@
     .bar-row { grid-template-columns: 120px 1fr 50px; }
     nav { flex-direction: column; gap: 1rem; padding: 1rem; }
     .tabs { flex-wrap: wrap; justify-content: center; }
+    .tabs button { padding: .45rem .85rem; font-size: .88rem; }
     .container { padding: 0 1rem; }
     .covenant-card { padding: 2rem 1.2rem; }
     .covenant-title { font-size: 2rem; }
     .dream-form, .rating-card { position: static; }
+    .lucid-counter-controls { grid-template-columns: 1fr; gap: .5rem; }
+    .lucid-counter-num { font-size: 4.5rem; }
+    .lucid-counter-slash { font-size: 3rem; }
+    .lucid-counter-total { font-size: 2.2rem; }
+    .lucid-attempt-actions { grid-template-columns: 1fr; }
+    .lucid-history-item { grid-template-columns: auto 1fr auto; }
+    .lucid-history-attempt { display: none; }
   }
   @media (max-width: 520px) {
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .days-grid { grid-template-columns: repeat(7, 1fr); }
     .hero h1 { font-size: 2.8rem; }
     .counter-number { font-size: 3.5rem; }
+    .tabs button { padding: .4rem .7rem; font-size: .82rem; }
+    .lucid-counter-card { padding: 1.8rem 1.2rem; }
+    .lucid-stats-row { grid-template-columns: 1fr 1fr; }
   }
 
   /* Scrollbar */
@@ -1609,6 +1924,8 @@
     <button data-tab="checkin">تسجيل اليوم</button>
     <button data-tab="stats">الإحصائيات</button>
     <button data-tab="dreams">الأحلام</button>
+    <button data-tab="lucid">الحلم الواعي</button>
+    <button data-tab="motivation">التحفيز</button>
     <button data-tab="habit">العادة</button>
     <button data-tab="punishment">العقاب</button>
     <button data-tab="covenant">العهد</button>
@@ -1664,7 +1981,7 @@
     <div class="stat-card">
       <div class="stat-label">أيام مثالية</div>
       <div class="stat-value" id="idealCount">0</div>
-      <div class="stat-sub">5/5 priorities</div>
+      <div class="stat-sub">6/6 priorities</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Streak حالي</div>
@@ -1800,6 +2117,120 @@
     </div>
 
     <div class="dreams-list" id="dreamsList"></div>
+  </div>
+</section>
+
+<!-- ===== LUCID DREAMING ===== -->
+<section id="lucid">
+  <div class="section-head">
+    <h2 class="section-title">الحلم <span class="accent">الواعي · Lucid</span></h2>
+    <span class="section-sub">الواقع · المحاولة · التذكّر</span>
+  </div>
+
+  <div class="lucid-intro">
+    <div class="lucid-intro-quote">
+      "كل اللي أسويه حتى أنجز هو هذا"
+    </div>
+    <p class="lucid-intro-text">
+      ثلاث ركائز يومية: <span class="accent">سؤال نفسي عن الواقع</span> 10+ مرات،
+      <span class="accent">محاولة دخول الحلم</span> كل ليلة، وعند الاستيقاظ
+      <span class="accent">اكتب كل ما تذكرت</span> فورًا.
+    </p>
+  </div>
+
+  <!-- Reality Checks Counter -->
+  <div class="lucid-counter-card">
+    <div class="lucid-counter-head">
+      <div>
+        <div class="lucid-counter-label">Reality Checks · سؤال الواقع</div>
+        <div class="lucid-counter-sub">"هل أنا في حلم؟ من أين جاء هذا الكلام؟"</div>
+      </div>
+      <div class="lucid-counter-target">الهدف · 10+</div>
+    </div>
+    <div class="lucid-counter-display">
+      <span class="lucid-counter-num" id="rcCount">0</span>
+      <span class="lucid-counter-slash">/</span>
+      <span class="lucid-counter-total">10</span>
+    </div>
+    <div class="lucid-progress-bar">
+      <div class="lucid-progress-fill" id="rcProgressFill"></div>
+    </div>
+    <div class="lucid-counter-controls">
+      <button class="lucid-rc-btn" id="rcAddBtn">+ سؤال الآن</button>
+      <button class="lucid-rc-btn secondary" id="rcUndoBtn">تراجع</button>
+      <button class="lucid-rc-btn danger" id="rcResetBtn">تصفير اليوم</button>
+    </div>
+    <div class="lucid-counter-status" id="rcStatusText"></div>
+  </div>
+
+  <!-- Lucid Attempt -->
+  <div class="lucid-attempt-card">
+    <h3>محاولة الليلة</h3>
+    <p class="lucid-attempt-desc">
+      قبل النوم: نية واضحة "أنا أعرف أني في حلم". اقرأ آخر حلم سجلته. تنفّس بعمق.
+    </p>
+    <div class="lucid-attempt-actions" id="lucidAttemptActions"></div>
+  </div>
+
+  <!-- Lucid History/Stats -->
+  <div class="lucid-stats-row">
+    <div class="lucid-stat-card">
+      <div class="lucid-stat-label">إجمالي Reality Checks</div>
+      <div class="lucid-stat-value" id="rcTotalAll">0</div>
+      <div class="lucid-stat-sub">منذ البداية</div>
+    </div>
+    <div class="lucid-stat-card">
+      <div class="lucid-stat-label">أيام أكملت 10+</div>
+      <div class="lucid-stat-value" id="rcGoodDays">0</div>
+      <div class="lucid-stat-sub">يوم محقق</div>
+    </div>
+    <div class="lucid-stat-card">
+      <div class="lucid-stat-label">سلسلة محاولات</div>
+      <div class="lucid-stat-value" id="lucidStreak">0</div>
+      <div class="lucid-stat-sub">يوم متتالي</div>
+    </div>
+    <div class="lucid-stat-card">
+      <div class="lucid-stat-label">متوسط يومي</div>
+      <div class="lucid-stat-value" id="rcAvg">0</div>
+      <div class="lucid-stat-sub">RC في اليوم</div>
+    </div>
+  </div>
+
+  <!-- Lucid History List -->
+  <div class="lucid-history">
+    <h3>سجل الأيام</h3>
+    <div class="lucid-history-list" id="lucidHistoryList"></div>
+  </div>
+</section>
+
+<!-- ===== MOTIVATION ===== -->
+<section id="motivation">
+  <div class="section-head">
+    <h2 class="section-title">التحفيز <span class="accent">· Motivation</span></h2>
+    <span class="section-sub">ما يحركك · ما يثيرك</span>
+  </div>
+
+  <div class="dreams-layout">
+    <div class="dream-form">
+      <h3>تحفيز جديد</h3>
+      <label>العنوان · Title</label>
+      <input type="text" id="motTitle" placeholder="عنوان قصير..."/>
+      <label>النوع · Type</label>
+      <div class="mood-picker" id="motTypePicker">
+        <button class="mood-pill" data-type="هدف">هدف</button>
+        <button class="mood-pill" data-type="رؤية">رؤية</button>
+        <button class="mood-pill" data-type="اقتباس">اقتباس</button>
+        <button class="mood-pill" data-type="تذكير">تذكير</button>
+        <button class="mood-pill" data-type="نصر">نصر</button>
+        <button class="mood-pill" data-type="مثير">مثير</button>
+        <button class="mood-pill" data-type="غضب">غضب</button>
+      </div>
+      <label>المحتوى · Content</label>
+      <textarea id="motBody" placeholder="اكتب التحفيز، اقتباس، فكرة، أو شي يثيرك..."></textarea>
+      <button class="save-btn" id="saveMotBtn">حفظ · Save</button>
+    </div>
+
+    <div class="dreams-list" id="motList"></div>
   </div>
 </section>
 
@@ -2003,6 +2434,7 @@ const PRIORITIES = [
   { id: 3, title: 'الجسم · وزن + فك', desc: 'تمرين الساعة 1، أكل أكثر، تمارين الفك، علك، Mewing.' },
   { id: 4, title: 'النوم', desc: 'منبه النوم يرن → للفراش مباشرة. النافذة: 10:30-11:30.' },
   { id: 5, title: 'النظافة', desc: 'ساعة واحدة: تنظيف، شاور، غسيل، ترتيب، تبخير.' },
+  { id: 6, title: 'الحلم الواعي', desc: '10+ Reality Checks · محاولة دخول الحلم · توثيق كل ما تتذكره عند الاستيقاظ.', startDay: 66 },
 ];
 
 const STORAGE_KEY = 'nineDaysData_v1';
@@ -2021,12 +2453,25 @@ function loadData() {
         paidSessions: [], // [{iso, hours, timestamp}]
         manualOverrides: {}, // {iso: {exercise: true/false, food: ..., clean: ..., social: ...}}
       };
+      if (!d.motivations) d.motivations = [];
+      if (!d.lucid) d.lucid = { realityChecks: {}, attempts: {} }; // {iso: count} for both
+      // Migrate days that only have 5 priorities to 6
+      for (const iso in d.days) {
+        if (d.days[iso].priorities && d.days[iso].priorities.length === 5) {
+          d.days[iso].priorities.push(false);
+        }
+        if (d.days[iso].notes && d.days[iso].notes.length === 5) {
+          d.days[iso].notes.push('');
+        }
+      }
       return d;
     }
   } catch(e) { console.warn(e); }
   return {
     days: {},
     dreams: [],
+    motivations: [],
+    lucid: { realityChecks: {}, attempts: {} },
     habit: { name: 'Goal Battles', log: {} },
     punishment: {
       workLog: {},
@@ -2102,9 +2547,11 @@ function seedHistory() {
   };
   for (const [dn, v] of Object.entries(seed)) {
     const date = dayNumToISO(parseInt(dn));
+    // Pad with false for the 6th priority (lucid dreaming) - didn't exist back then
+    const priorities = v.p.length === 5 ? [...v.p, false] : v.p;
     data.days[date] = {
       dayNum: parseInt(dn),
-      priorities: v.p,
+      priorities,
       rating: v.r,
       note: v.note || '',
       savedAt: new Date().toISOString(),
@@ -2167,11 +2614,24 @@ function formatDateShort(iso) {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-function computeRating(priorities) {
-  const count = priorities.filter(Boolean).length;
-  if (count === 5) return 'ideal';
-  if (count === 4) return 'success';
-  if (count === 3) return 'good';
+function getActivePriorities(dayNum) {
+  // Returns the priorities applicable for a given day number
+  return PRIORITIES.filter(p => !p.startDay || dayNum >= p.startDay);
+}
+
+function getActivePriorityIndices(dayNum) {
+  return PRIORITIES.map((p, i) => ({ p, i })).filter(x => !x.p.startDay || dayNum >= x.p.startDay).map(x => x.i);
+}
+
+function computeRating(priorities, dayNum) {
+  // Only count active priorities for this day
+  const activeIndices = getActivePriorityIndices(dayNum || currentDayNum());
+  const activeValues = activeIndices.map(i => priorities[i]);
+  const count = activeValues.filter(Boolean).length;
+  const total = activeValues.length;
+  if (count === total) return 'ideal';
+  if (count >= total - 1) return 'success';
+  if (count >= total - 2) return 'good';
   return 'fail';
 }
 
@@ -2195,12 +2655,14 @@ document.querySelectorAll('#tabs button').forEach(b => {
     if (b.dataset.tab === 'home') renderHome();
     if (b.dataset.tab === 'habit') renderHabit();
     if (b.dataset.tab === 'punishment') renderPunishment();
+    if (b.dataset.tab === 'lucid') renderLucid();
+    if (b.dataset.tab === 'motivation') renderMotivation();
     window.scrollTo(0, 0);
   });
 });
 
 /* ============ CHECK-IN ============ */
-let checkinState = { priorities: [null,null,null,null,null], notes: ['','','','',''], rating: null, note: '' };
+let checkinState = { priorities: [null,null,null,null,null,null], notes: ['','','','','',''], rating: null, note: '' };
 
 function renderCheckin() {
   const iso = today();
@@ -2208,14 +2670,16 @@ function renderCheckin() {
   const existing = data.days[iso];
 
   if (existing) {
+    const exPriorities = existing.priorities.length === 5 ? [...existing.priorities, false] : existing.priorities;
+    const exNotes = (existing.notes && existing.notes.length >= 6) ? existing.notes : [...(existing.notes || ['','','','','']), ''].slice(0, 6);
     checkinState = {
-      priorities: [...existing.priorities].map(v => v === true ? 'yes' : v === false ? 'no' : null),
-      notes: existing.notes || ['','','','',''],
+      priorities: exPriorities.map(v => v === true ? 'yes' : v === false ? 'no' : null),
+      notes: exNotes,
       rating: existing.rating,
       note: existing.note || '',
     };
   } else {
-    checkinState = { priorities: [null,null,null,null,null], notes: ['','','','',''], rating: null, note: '' };
+    checkinState = { priorities: [null,null,null,null,null,null], notes: ['','','','','',''], rating: null, note: '' };
   }
 
   document.getElementById('todayDayNum').textContent = dn > 0 && dn <= TOTAL_DAYS ? dn : '—';
@@ -2224,15 +2688,18 @@ function renderCheckin() {
 
   const list = document.getElementById('prioritiesList');
   list.innerHTML = '';
+  const activeIndices = getActivePriorityIndices(dn);
   PRIORITIES.forEach((p, idx) => {
+    if (!activeIndices.includes(idx)) return; // Skip not-yet-active priorities
     const state = checkinState.priorities[idx];
     const note = checkinState.notes[idx] || '';
     const el = document.createElement('div');
     el.className = 'priority';
+    const isNew = p.startDay && dn === p.startDay;
     el.innerHTML = `
       <div class="priority-num">${p.id}</div>
       <div class="priority-body">
-        <div class="priority-title">${p.title}</div>
+        <div class="priority-title">${p.title} ${isNew ? '<span style="background:rgba(200,169,106,.15);color:var(--accent);font-size:.65rem;padding:.2rem .5rem;border-radius:3px;margin-right:.5rem;font-family:JetBrains Mono,monospace;letter-spacing:.1em;">جديد · NEW</span>' : ''}</div>
         <div class="priority-desc">${p.desc}</div>
         <div class="priority-actions">
           <button class="btn-check ${state === 'yes' ? 'active success' : ''}" data-idx="${idx}" data-val="yes">✓</button>
@@ -2288,7 +2755,14 @@ document.getElementById('saveDayBtn').addEventListener('click', () => {
   const iso = today();
   const dn = currentDayNum();
   const priorities = checkinState.priorities.map(v => v === 'yes' ? true : v === 'no' ? false : false);
-  const rating = checkinState.rating || computeRating(priorities);
+
+  // For lucid (priority 6): if user hasn't explicitly set in checkin, derive from lucid tab
+  if (dn >= (PRIORITIES[5].startDay || 999) && checkinState.priorities[5] === null) {
+    const lucidDay = getLucidDay(iso);
+    priorities[5] = lucidDay.rc >= RC_DAILY_TARGET && lucidDay.attempt !== null;
+  }
+
+  const rating = checkinState.rating || computeRating(priorities, dn);
   data.days[iso] = {
     dayNum: dn,
     priorities,
@@ -2366,11 +2840,14 @@ function openDayModal(iso) {
   const day = data.days[iso];
   if (!day) return;
   const ratingMap = { ideal: 'يوم مثالي', success: 'يوم ناجح', good: 'يوم جيد', fail: 'يوم فاشل', excused: 'يوم معذور' };
+  const activeIndices = getActivePriorityIndices(day.dayNum);
   const html = `
     <button class="modal-close" onclick="document.getElementById('dayModal').classList.remove('show')">×</button>
     <h3>Day ${day.dayNum} · ${ratingMap[day.rating] || day.rating}</h3>
     <div class="section-sub" style="margin-bottom:1.5rem;">${formatDate(iso)}</div>
-    ${PRIORITIES.map((p,i) => `
+    ${PRIORITIES.filter((_, i) => activeIndices.includes(i)).map((p) => {
+      const i = PRIORITIES.indexOf(p);
+      return `
       <div style="padding: .8rem 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem;">
         <div>
           <div style="font-weight: 500;">${p.id}. ${p.title}</div>
@@ -2378,7 +2855,7 @@ function openDayModal(iso) {
         </div>
         <div style="color: ${day.priorities[i] ? 'var(--success)' : 'var(--fail)'}; font-size: 1.3rem;">${day.priorities[i] ? '✓' : '✗'}</div>
       </div>
-    `).join('')}
+    `;}).join('')}
     ${day.note ? `<div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-2); border-radius: 4px; color: var(--ink-dim); line-height: 1.7;">${day.note}</div>` : ''}
   `;
   document.getElementById('dayModalContent').innerHTML = html;
@@ -2401,12 +2878,17 @@ function renderStats() {
   const bars = document.getElementById('priorityStats');
   bars.innerHTML = '';
   PRIORITIES.forEach((p, i) => {
-    const hits = all.filter(d => d.priorities[i]).length;
-    const pct = all.length ? Math.round(hits / all.length * 100) : 0;
+    // For priority 6 (lucid), only count days from its startDay
+    const relevantDays = p.startDay
+      ? all.filter(d => d.dayNum >= p.startDay)
+      : all;
+    const hits = relevantDays.filter(d => d.priorities[i]).length;
+    const pct = relevantDays.length ? Math.round(hits / relevantDays.length * 100) : 0;
     const row = document.createElement('div');
     row.className = 'bar-row';
+    const newBadge = p.startDay ? `<span style="background:rgba(200,169,106,.15);color:var(--accent);font-size:.6rem;padding:.15rem .45rem;border-radius:3px;margin-right:.4rem;font-family:JetBrains Mono,monospace;letter-spacing:.1em;">من اليوم ${p.startDay}</span>` : '';
     row.innerHTML = `
-      <div class="bar-label">${p.id}. ${p.title}</div>
+      <div class="bar-label">${p.id}. ${p.title} ${newBadge}</div>
       <div class="bar-track"><div class="bar-fill" style="width: ${pct}%"></div></div>
       <div class="bar-value">${pct}%</div>
     `;
@@ -3211,6 +3693,299 @@ function wirePunishmentButtons() {
   };
 }
 
+/* ============ LUCID DREAMING ============ */
+const RC_DAILY_TARGET = 10;
+
+function getLucidDay(iso) {
+  return {
+    rc: data.lucid.realityChecks[iso] || 0,
+    attempt: data.lucid.attempts[iso] || null, // null | 'done' | 'tried'
+  };
+}
+
+function setRcCount(iso, n) {
+  if (n <= 0) {
+    delete data.lucid.realityChecks[iso];
+  } else {
+    data.lucid.realityChecks[iso] = n;
+  }
+  saveData();
+}
+
+function setLucidAttempt(iso, val) {
+  if (val === null) {
+    delete data.lucid.attempts[iso];
+  } else {
+    data.lucid.attempts[iso] = val;
+  }
+  saveData();
+  // Auto-update priority 6 in today's checkin if it's today
+  if (iso === today()) syncLucidToPriority();
+}
+
+function syncLucidToPriority() {
+  // The 6th priority (index 5) is "achieved" if RC >= 10 AND an attempt was made
+  const iso = today();
+  const dn = currentDayNum();
+  if (dn < (PRIORITIES[5].startDay || 999)) return;
+
+  const lucidDay = getLucidDay(iso);
+  const achieved = lucidDay.rc >= RC_DAILY_TARGET && lucidDay.attempt !== null;
+
+  // Make sure today exists in days
+  if (!data.days[iso]) {
+    data.days[iso] = {
+      dayNum: dn,
+      priorities: [false, false, false, false, false, achieved],
+      rating: null,
+      notes: ['','','','','',''],
+      note: '',
+      savedAt: new Date().toISOString(),
+    };
+  } else {
+    // Pad to 6 if needed
+    while (data.days[iso].priorities.length < 6) data.days[iso].priorities.push(false);
+    data.days[iso].priorities[5] = achieved;
+  }
+  saveData();
+}
+
+function renderLucid() {
+  const iso = today();
+  const dn = currentDayNum();
+  const lucidDay = getLucidDay(iso);
+
+  // RC counter
+  const rcEl = document.getElementById('rcCount');
+  rcEl.textContent = lucidDay.rc;
+  const pct = Math.min(100, (lucidDay.rc / RC_DAILY_TARGET) * 100);
+  document.getElementById('rcProgressFill').style.width = pct + '%';
+
+  const counterCard = document.querySelector('.lucid-counter-card');
+  if (lucidDay.rc >= RC_DAILY_TARGET) {
+    counterCard.classList.add('completed');
+  } else {
+    counterCard.classList.remove('completed');
+  }
+
+  const statusEl = document.getElementById('rcStatusText');
+  if (lucidDay.rc === 0) {
+    statusEl.textContent = '';
+  } else if (lucidDay.rc < RC_DAILY_TARGET) {
+    statusEl.textContent = `باقي ${RC_DAILY_TARGET - lucidDay.rc} للهدف`;
+    statusEl.style.color = 'var(--ink-dim)';
+  } else if (lucidDay.rc === RC_DAILY_TARGET) {
+    statusEl.textContent = '✓ حققت الهدف اليوم';
+    statusEl.style.color = 'var(--success)';
+  } else {
+    statusEl.textContent = `✓ تجاوزت الهدف بـ ${lucidDay.rc - RC_DAILY_TARGET}`;
+    statusEl.style.color = 'var(--success)';
+  }
+
+  // Attempt buttons
+  const attemptDiv = document.getElementById('lucidAttemptActions');
+  attemptDiv.innerHTML = `
+    <button class="lucid-attempt-btn ${lucidDay.attempt === 'done' ? 'active' : ''}" id="attemptDoneBtn">
+      ${lucidDay.attempt === 'done' ? '✓ ' : ''}دخلت الحلم الواعي
+    </button>
+    <button class="lucid-attempt-btn ${lucidDay.attempt === 'tried' ? 'active' : ''}" id="attemptTriedBtn">
+      ${lucidDay.attempt === 'tried' ? '✓ ' : ''}حاولت الليلة
+    </button>
+  `;
+  document.getElementById('attemptDoneBtn').onclick = () => {
+    setLucidAttempt(iso, lucidDay.attempt === 'done' ? null : 'done');
+    renderLucid();
+    renderHome();
+    renderCheckin();
+  };
+  document.getElementById('attemptTriedBtn').onclick = () => {
+    setLucidAttempt(iso, lucidDay.attempt === 'tried' ? null : 'tried');
+    renderLucid();
+    renderHome();
+    renderCheckin();
+  };
+
+  // Stats
+  const allRcDays = Object.entries(data.lucid.realityChecks);
+  const totalRc = allRcDays.reduce((s, [_, n]) => s + n, 0);
+  document.getElementById('rcTotalAll').textContent = totalRc;
+
+  const goodDays = allRcDays.filter(([_, n]) => n >= RC_DAILY_TARGET).length;
+  document.getElementById('rcGoodDays').textContent = goodDays;
+
+  // Streak: consecutive days from today backwards where attempt !== null
+  let streak = 0;
+  for (let i = 0; i < 90; i++) {
+    const checkDate = new Date();
+    checkDate.setDate(checkDate.getDate() - i);
+    const checkIso = checkDate.toISOString().slice(0, 10);
+    if (data.lucid.attempts[checkIso]) {
+      streak++;
+    } else if (i === 0) {
+      // Today not yet attempted, that's ok, check yesterday
+      continue;
+    } else {
+      break;
+    }
+  }
+  document.getElementById('lucidStreak').textContent = streak;
+
+  // Average
+  const daysSinceStart = Math.max(1, dn - (PRIORITIES[5].startDay || dn) + 1);
+  const avg = totalRc > 0 ? (totalRc / Math.max(allRcDays.length, 1)).toFixed(1) : '0';
+  document.getElementById('rcAvg').textContent = avg;
+
+  // History list
+  renderLucidHistory();
+}
+
+function renderLucidHistory() {
+  const container = document.getElementById('lucidHistoryList');
+  const allDates = new Set([
+    ...Object.keys(data.lucid.realityChecks),
+    ...Object.keys(data.lucid.attempts),
+  ]);
+  const sorted = [...allDates].sort((a,b) => b.localeCompare(a));
+
+  if (sorted.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:1.5rem;">لا سجل بعد · ابدأ اليوم</div>';
+    return;
+  }
+
+  container.innerHTML = sorted.slice(0, 30).map(iso => {
+    const rc = data.lucid.realityChecks[iso] || 0;
+    const att = data.lucid.attempts[iso];
+    const dn = isoToDayNum(iso);
+    const success = rc >= RC_DAILY_TARGET && att !== null && att !== undefined;
+    const attLabel = att === 'done' ? '✓ دخل الحلم' : att === 'tried' ? '✓ حاول' : 'لم يحاول';
+    return `
+      <div class="lucid-history-item">
+        <div class="lucid-history-day">Day ${dn}</div>
+        <div class="lucid-history-rc"><span class="num">${rc}</span> RC ${rc >= RC_DAILY_TARGET ? '✓' : ''}</div>
+        <div class="lucid-history-attempt ${att ? 'done' : ''}">${attLabel}</div>
+        <div class="lucid-history-status ${success ? '' : 'fail'}">${success ? '✓' : '·'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function wireLucidButtons() {
+  const addBtn = document.getElementById('rcAddBtn');
+  const undoBtn = document.getElementById('rcUndoBtn');
+  const resetBtn = document.getElementById('rcResetBtn');
+
+  if (addBtn) addBtn.onclick = () => {
+    const iso = today();
+    const cur = data.lucid.realityChecks[iso] || 0;
+    setRcCount(iso, cur + 1);
+    syncLucidToPriority();
+    renderLucid();
+    renderHome();
+    renderCheckin();
+    if (cur + 1 === RC_DAILY_TARGET) {
+      toast('🌙 وصلت 10 · حقق الهدف');
+    }
+  };
+  if (undoBtn) undoBtn.onclick = () => {
+    const iso = today();
+    const cur = data.lucid.realityChecks[iso] || 0;
+    if (cur > 0) {
+      setRcCount(iso, cur - 1);
+      syncLucidToPriority();
+      renderLucid();
+      renderHome();
+      renderCheckin();
+    }
+  };
+  if (resetBtn) resetBtn.onclick = () => {
+    if (!confirm('تصفير عداد اليوم؟')) return;
+    const iso = today();
+    setRcCount(iso, 0);
+    syncLucidToPriority();
+    renderLucid();
+    renderHome();
+    renderCheckin();
+    toast('تم التصفير');
+  };
+}
+
+/* ============ MOTIVATION ============ */
+let selectedMotType = null;
+
+function wireMotivationPicker() {
+  document.querySelectorAll('#motTypePicker .mood-pill').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#motTypePicker .mood-pill').forEach(x => x.classList.remove('active'));
+      if (selectedMotType === b.dataset.type) {
+        selectedMotType = null;
+      } else {
+        selectedMotType = b.dataset.type;
+        b.classList.add('active');
+      }
+    });
+  });
+
+  const saveBtn = document.getElementById('saveMotBtn');
+  if (saveBtn) saveBtn.onclick = () => {
+    const title = document.getElementById('motTitle').value.trim();
+    const body = document.getElementById('motBody').value.trim();
+    if (!title || !body) { toast('اكتب عنوان ومحتوى'); return; }
+    const item = {
+      id: Date.now(),
+      title,
+      body,
+      type: selectedMotType || 'تذكير',
+      date: new Date().toISOString(),
+    };
+    data.motivations.unshift(item);
+    saveData();
+    document.getElementById('motTitle').value = '';
+    document.getElementById('motBody').value = '';
+    selectedMotType = null;
+    document.querySelectorAll('#motTypePicker .mood-pill').forEach(x => x.classList.remove('active'));
+    toast('تم الحفظ');
+    renderMotivation();
+  };
+}
+
+function renderMotivation() {
+  const list = document.getElementById('motList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!data.motivations || data.motivations.length === 0) {
+    list.innerHTML = '<div class="empty-state">لم تُسجّل أي تحفيزات بعد</div>';
+    return;
+  }
+  data.motivations.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'dream-card';
+    card.innerHTML = `
+      <div class="dream-head">
+        <div class="dream-title">${escapeHtml(m.title)}</div>
+        <div class="dream-date">${formatDateShort(m.date)}</div>
+      </div>
+      <div class="dream-mood">${escapeHtml(m.type)}</div>
+      <div class="dream-body" id="mb-${m.id}">${escapeHtml(m.body)}</div>
+      <div class="dream-actions">
+        <button class="dream-btn" onclick="toggleMotivation('${m.id}')">عرض الكامل</button>
+        <button class="dream-btn danger" onclick="deleteMotivation(${m.id})">حذف</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+window.toggleMotivation = (id) => {
+  document.getElementById('mb-' + id).classList.toggle('expanded');
+};
+window.deleteMotivation = (id) => {
+  if (!confirm('حذف هذا التحفيز؟')) return;
+  data.motivations = data.motivations.filter(m => m.id !== id);
+  saveData();
+  renderMotivation();
+  toast('تم الحذف');
+};
+
 /* ============ INIT ============ */
 seedHistory();
 renderHome();
@@ -3219,6 +3994,10 @@ renderDreams();
 renderHabit();
 wirePunishmentButtons();
 renderPunishment();
+wireLucidButtons();
+renderLucid();
+wireMotivationPicker();
+renderMotivation();
 // If timer was running when page loaded, continue ticking
 if (tState.running) startTimerTick();
 </script>
